@@ -1,0 +1,84 @@
+<div class="container mt-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="fw-bold">User Management</h2>
+          <p class="text-muted mb-0">View and manage system users (Customers)</p>
+        </div>
+        <span class="badge bg-primary fs-6">{{ totalUsers }} Users</span>
+      </div>
+
+      @if (isLoading) {
+        <div class="text-center py-5">
+           <div class="spinner-border text-primary" role="status">
+             <span class="visually-hidden">Loading...</span>
+           </div>
+        </div>
+      } @else {
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th class="py-3 ps-3">Name / Email</th>
+                    <th class="py-3">Contact</th>
+                    <th class="py-3">Address</th>
+                    <th class="py-3">Status</th>
+                    <th class="py-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (user of users; track user.id) {
+                    <tr>
+                      <td class="ps-3">
+                        <div class="fw-bold">{{ user.name }}</div>
+                        <div class="small text-muted">{{ user.email }}</div>
+                      </td>
+                      <td>
+                        <div><i class="bi bi-telephone me-1 text-muted small"></i> {{ user.phone }}</div>
+                      </td>
+                      <td>
+                         <div class="text-truncate" style="max-width: 200px;" title="{{ user.address }}, {{ user.city }}">
+                           {{ user.city }}, {{ user.state }}
+                         </div>
+                         <div class="small text-muted">{{ user.pincode }}</div>
+                      </td>
+                      <td>
+                        @if (user.isActive) {
+                          <span class="badge bg-success-subtle text-success">Active</span>
+                        } @else {
+                          <span class="badge bg-danger-subtle text-danger">Inactive</span>
+                        }
+                      </td>
+                      <td>
+                        <!-- Placeholder actions -->
+                        <button class="btn btn-sm btn-outline-secondary" disabled>Edit</button>
+                      </td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="5" class="text-center py-5 text-muted">
+                        No customers found.
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer bg-white border-top py-3">
+             <div class="d-flex justify-content-between align-items-center">
+               <span class="text-muted small">Page {{ page + 1 }} of {{ totalPages }}</span>
+               <div>
+                  <button class="btn btn-sm btn-outline-secondary me-2" 
+                          [disabled]="page === 0" 
+                          (click)="changePage(page - 1)">Previous</button>
+                  <button class="btn btn-sm btn-outline-secondary" 
+                          [disabled]="page === totalPages - 1" 
+                          (click)="changePage(page + 1)">Next</button>
+               </div>
+             </div>
+          </div>
+        </div>
+      }
+    </div>

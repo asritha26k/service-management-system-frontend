@@ -1,0 +1,49 @@
+<div class="row g-4">
+      <div class="col-md-12">
+        <div class="card border shadow-sm p-4">
+          <h5 class="card-title mb-1 fw-bold text-muted">Total Revenue</h5>
+          <h2 class="display-5 fw-bold text-primary">₹{{ (report?.totalRevenue || 0) | number:'1.2-2' }}</h2>
+        </div>
+      </div>
+
+
+      <div class="col-md-12">
+        <div class="card border shadow-sm">
+          <div class="card-header bg-white py-3 border-bottom">
+             <h5 class="mb-0 fw-bold">Detailed Monthly Performance</h5>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead class="bg-light border-bottom">
+                  <tr>
+                    <th class="ps-4">Year</th>
+                    <th>Month</th>
+                    <th>Invoices Paid</th>
+                    <th class="text-end pe-4">Revenue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (item of monthlyReports; track item.month) {
+                    <tr>
+                      <td class="ps-4">{{ item.year }}</td>
+                      <td>{{ getMonthName(item.month) }}</td> 
+                      <td>
+                        <span class="badge bg-light text-primary border">{{ item.paidInvoiceCount }}</span>
+                      </td>
+                      <td class="text-end pe-4 text-success fw-bold">₹{{ item.totalRevenue | number:'1.2-2' }}</td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="4" class="text-center py-5 text-muted">
+                        No detailed data available.
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

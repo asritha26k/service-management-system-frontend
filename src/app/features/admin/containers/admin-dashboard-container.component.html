@@ -1,0 +1,220 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Admin Dashboard</h2>
+      <span class="text-muted">Overview of system performance</span>
+    </div>
+
+    @if (isLoading) {
+    <div class="text-center py-5">
+       <div class="spinner-border text-primary" role="status">
+         <span class="visually-hidden">Loading...</span>
+       </div>
+    </div>
+    }
+
+    @if (!isLoading && summary) {
+    <div class="row g-4 mb-4">
+      <div class="col-md-3">
+        <div class="card text-white bg-primary h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h6 class="card-title text-uppercase mb-2 opacity-75">Active Requests</h6>
+            <h2 class="display-6 fw-bold mb-0">{{ summary.totalActiveRequests }}</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white bg-success h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h6 class="card-title text-uppercase mb-2 opacity-75">Total Completed</h6>
+             <h2 class="display-6 fw-bold mb-0">{{ summary.totalCompletedRequests }}</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white bg-warning h-100 shadow-sm border-0">
+           <div class="card-body">
+            <h6 class="card-title text-uppercase mb-2 opacity-75">Avg Resolution</h6>
+             <h2 class="display-6 fw-bold mb-0">{{ summary.averageResolutionTimeHours | number:'1.1-1' }}h</h2>
+           </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+         <div class="card text-white bg-secondary h-100 shadow-sm border-0">
+           <div class="card-body">
+             <h6 class="card-title text-uppercase mb-2 opacity-75">Active Technicians</h6>
+             <h2 class="display-6 fw-bold mb-0">{{ summary.activeTechnicians }}</h2>
+           </div>
+         </div>
+      </div>
+    </div>
+
+    @if (technicianWorkload) {
+    <div class="row g-4 mb-4">
+      <div class="col-12">
+        <div class="card bg-light border-0 shadow-sm">
+          <div class="card-body">
+            <h6 class="card-title fw-bold text-uppercase opacity-75 mb-3">Technician Workload</h6>
+            <div class="row text-center">
+              <div class="col-md-4 border-end">
+                <small class="text-muted d-block">Total Technicians</small>
+                <h4 class="fw-bold text-primary mb-0">{{ technicianWorkload.totalTechnicians }}</h4>
+              </div>
+              <div class="col-md-4 border-end">
+                <small class="text-muted d-block">Available Technicians</small>
+                <h4 class="fw-bold text-success mb-0">{{ technicianWorkload.availableTechnicians }}</h4>
+              </div>
+              <div class="col-md-4">
+                <small class="text-muted d-block">Avg Workload Ratio</small>
+                <h4 class="fw-bold text-primary mb-0">{{ technicianWorkload.averageWorkloadRatio | number:'1.2-2' }}%</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+
+    <div class="row g-4 mb-4">
+      <!-- Request Status (Col-4) -->
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-header bg-white fw-bold">Service Requests by Status</div>
+          <div class="card-body">
+            <div class="list-group list-group-flush">
+              @for (entry of getStatusEntries(); track entry.key) {
+                <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  <span class="text-capitalize">{{ entry.key.toLowerCase() }}</span>
+                  <span class="badge bg-light text-primary rounded-pill">{{ entry.value }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Performance (Col-8) -->
+      @if (categoryStats) {
+      <div class="col-md-8">
+           <div class="card shadow-sm border-0 h-100">
+             <div class="card-header bg-white fw-bold">Service Requests by Category</div>
+             <div class="card-body">
+               <div class="row">
+                 @for (category of categoryStats.categories; track category.categoryId) {
+                   <div class="col-md-6 mb-3">
+                     <div class="border rounded p-3 h-100">
+                       <div class="d-flex justify-content-between align-items-center mb-2">
+                         <h6 class="fw-bold mb-0 text-primary">{{ category.categoryName }}</h6>
+                         <span class="badge bg-secondary">{{ category.totalRequests }}</span>
+                       </div>
+                       <ul class="list-group list-group-flush list-group-numbered small">
+                         @for (service of category.services; track service.serviceId) {
+                           <li class="list-group-item d-flex justify-content-between align-items-center px-0 border-0 py-1">
+                             <span class="text-truncate" style="max-width: 150px;" title="{{ service.serviceName }}">{{ service.serviceName }}</span>
+                             <span class="fw-bold">{{ service.requestCount }}</span>
+                           </li>
+                         }
+                       </ul>
+                     </div>
+                   </div>
+                 }
+               </div>
+             </div>
+           </div>
+      </div>
+      }
+    </div>
+
+    <!-- Financial Overview (Full Width) -->
+    <div class="row g-4 mb-4">
+      <div class="col-12">
+        <div class="card h-100 shadow-sm">
+          <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
+            <span>Financial Overview</span>
+            <span class="badge bg-success">Monthly Report</span>
+          </div>
+          <div class="card-body">
+            <div class="row text-center mb-4">
+              <div class="col-md-4 border-end">
+                <small class="text-muted d-block">Monthly Revenue</small>
+                <h4 class="text-primary fw-bold mb-0">₹{{ summary.monthlyRevenue | number:'1.2-2' }}</h4>
+              </div>
+              <div class="col-md-4 border-end">
+                <small class="text-muted d-block">Total Revenue</small>
+                <h4 class="text-success fw-bold mb-0">₹{{ summary.totalRevenue | number:'1.2-2' }}</h4>
+              </div>
+              <div class="col-md-4">
+                <small class="text-muted d-block">Pending Payments</small>
+                <h4 class="text-warning fw-bold mb-0">{{ summary.pendingPayments }}</h4>
+              </div>
+            </div>
+
+            @if (revenueSummary) {
+              <hr>
+              <div class="row mt-3">
+                <div class="col-md-6">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                      Service Amount <span>₹{{ revenueSummary.totalServiceAmount | number:'1.2-2' }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                      Tax Amount <span>₹{{ revenueSummary.totalTaxAmount | number:'1.2-2' }}</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                      Invoice Count <span>{{ revenueSummary.invoiceCount }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                      Paid Count <span class="text-success">{{ revenueSummary.paidCount }}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-header bg-light fw-bold border-0">User Management</div>
+          <div class="card-body d-grid gap-2">
+            <button class="btn btn-outline-primary text-start" routerLink="/admin/create-manager">
+              <i class="bi bi-person-plus me-2"></i> Create Service Manager
+            </button>
+            <button class="btn btn-outline-secondary text-start" routerLink="/admin/users">
+               <i class="bi bi-people me-2"></i> Manage All Users
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+         <div class="card h-100 shadow-sm border-0">
+           <div class="card-header bg-light fw-bold border-0">Service Catalog</div>
+           <div class="card-body d-grid gap-2">
+             <button class="btn btn-outline-primary text-start" routerLink="/admin/categories">
+               <i class="bi bi-tags me-2"></i> Manage Categories
+             </button>
+             <button class="btn btn-outline-primary text-start" routerLink="/admin/services">
+               <i class="bi bi-tools me-2"></i> Manage Services
+             </button>
+           </div>
+         </div>
+      </div>
+
+      <div class="col-md-4">
+         <div class="card h-100 shadow-sm border-0">
+           <div class="card-header bg-light fw-bold border-0">Analytics & Reports</div>
+           <div class="card-body d-grid gap-2">
+             <button class="btn btn-outline-success text-start" routerLink="/admin/revenue">
+               <i class="bi bi-currency-rupee me-2"></i> Full Revenue Report
+             </button>
+           </div>
+         </div>
+      </div>
+    </div>
+    }

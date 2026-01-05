@@ -1,0 +1,111 @@
+<div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow-sm border-0 mt-4">
+          <div class="card-header bg-white py-3">
+            <h4 class="mb-0 fw-bold">My Profile</h4>
+          </div>
+          <div class="card-body p-4">
+            @if (isLoading) {
+            <div class="text-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            }
+
+            @if (!isLoading && !profile && !isEditing) {
+            <div class="text-center py-4">
+               <p class="text-muted">Profile not found. Please create your profile.</p>
+               <button class="btn btn-primary px-4" (click)="enableEdit(true)">Create Profile</button>
+            </div>
+            }
+
+            @if (!isLoading && profile && !isEditing) {
+            <div>
+              <dl class="row mb-4">
+                <dt class="col-sm-3 text-muted fw-normal">Name</dt>
+                <dd class="col-sm-9 fw-bold">{{ profile.name }}</dd>
+
+                <dt class="col-sm-3 text-muted fw-normal">Phone</dt>
+                <dd class="col-sm-9">{{ profile.phone || '-' }}</dd>
+
+                <dt class="col-sm-3 text-muted fw-normal">Address</dt>
+                <dd class="col-sm-9">
+                  {{ profile.address }}<br>
+                  {{ profile.city }}, {{ profile.state }} {{ profile.pincode }}
+                </dd>
+              </dl>
+              <button class="btn btn-outline-primary px-4" (click)="enableEdit(false)">Edit Profile</button>
+            </div>
+            }
+
+            @if (!isLoading && isEditing) {
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              <div class="mb-3">
+                <label class="form-label fw-bold">Name</label>
+                <input type="text" class="form-control" formControlName="name" placeholder="Full Name">
+                @if (form.get('name')?.touched && form.get('name')?.invalid) {
+                <div class="invalid-feedback d-block">
+                  Name is required (min 2 chars).
+                </div>
+                }
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-bold">Phone</label>
+                <input type="text" class="form-control" formControlName="phone" placeholder="+1 234 567 8900">
+                @if (form.get('phone')?.touched && form.get('phone')?.invalid) {
+                <div class="invalid-feedback d-block">
+                  Invalid phone format (10-12 digits).
+                </div>
+                }
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-bold">Address</label>
+                <textarea class="form-control" formControlName="address" rows="2" placeholder="Street Address"></textarea>
+                @if (form.get('address')?.touched && form.get('address')?.invalid) {
+                <div class="invalid-feedback d-block">
+                  Address is required (min 10 chars).
+                </div>
+                }
+              </div>
+
+              <div class="row">
+                <div class="col-md-4 mb-3">
+                  <label class="form-label fw-bold">City</label>
+                  <input type="text" class="form-control" formControlName="city" placeholder="City">
+                  @if (form.get('city')?.touched && form.get('city')?.invalid) {
+                  <div class="invalid-feedback d-block">Required.</div>
+                  }
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label class="form-label fw-bold">State</label>
+                  <input type="text" class="form-control" formControlName="state" placeholder="State">
+                  @if (form.get('state')?.touched && form.get('state')?.invalid) {
+                  <div class="invalid-feedback d-block">Required.</div>
+                  }
+                </div>
+                <div class="col-md-4 mb-3">
+                   <label class="form-label fw-bold">Pincode</label>
+                   <input type="text" class="form-control" formControlName="pincode" placeholder="Pincode">
+                   @if (form.get('pincode')?.touched && form.get('pincode')?.invalid) {
+                   <div class="invalid-feedback d-block">
+                     Invalid pincode (6 digits).
+                   </div>
+                   }
+                </div>
+              </div>
+
+              <div class="d-flex gap-2 mt-3">
+                <button type="submit" class="btn btn-primary px-4" [disabled]="form.invalid || isSaving">
+                  {{ isSaving ? 'Saving...' : 'Save Changes' }}
+                </button>
+                <button type="button" class="btn btn-outline-secondary px-4" (click)="cancelEdit()">Cancel</button>
+              </div>
+            </form>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
