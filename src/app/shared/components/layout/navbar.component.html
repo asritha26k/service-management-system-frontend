@@ -1,0 +1,127 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 border-bottom">
+      <div class="container">
+        <a class="navbar-brand fw-bold" [routerLink]="getHomeLink()">Service Management</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/catalog" routerLinkActive="active">Service Catalog</a>
+            </li>
+            
+            @if (authState.userRole() === 'ADMIN') {
+               <li class="nav-item">
+                 <a class="nav-link" routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+               </li>
+               <li class="nav-item">
+                 <a class="nav-link" routerLink="/admin/categories" routerLinkActive="active">Categories</a>
+               </li>
+               <li class="nav-item">
+                 <a class="nav-link" routerLink="/admin/services" routerLinkActive="active">Services</a>
+               </li>
+               <li class="nav-item">
+                 <a class="nav-link" routerLink="/admin/users" routerLinkActive="active">Users</a>
+               </li>
+               <li class="nav-item">
+                 <a class="nav-link" routerLink="/admin/revenue" routerLinkActive="active">Revenue</a>
+               </li>
+            }
+
+            @if (authState.userRole() === 'CUSTOMER') {
+               <li class="nav-item">
+                 <a class="nav-link" routerLink="/customer/dashboard" routerLinkActive="active">Dashboard</a>
+               </li>
+               <li class="nav-item">
+                 <a class="nav-link" routerLink="/customer/create-request" routerLinkActive="active">New Request</a>
+               </li>
+               <li class="nav-item">
+                 <a class="nav-link" routerLink="/customer/requests" routerLinkActive="active">My History</a>
+               </li>
+               <li class="nav-item">
+                 <a class="nav-link" routerLink="/customer/invoices" routerLinkActive="active">Invoices</a>
+               </li>
+            }
+
+            @if (authState.userRole() === 'TECHNICIAN') {
+               <li class="nav-item">
+                 <a class="nav-link" routerLink="/technician/dashboard" routerLinkActive="active">Dashboard</a>
+               </li>
+               <li class="nav-item">
+                 <a class="nav-link" routerLink="/technician/tasks" routerLinkActive="active">My Tasks</a>
+               </li>
+            }
+
+             @if (authState.userRole() === 'MANAGER') {
+               <li class="nav-item">
+                 <a class="nav-link" routerLink="/manager/dashboard" routerLinkActive="active">Dashboard</a>
+               </li>
+               <li class="nav-item">
+                 <a class="nav-link" routerLink="/manager/requests" routerLinkActive="active">Requests</a>
+               </li>
+               <li class="nav-item">
+                 <a class="nav-link" routerLink="/manager/approvals" routerLinkActive="active">Technician Applications</a>
+               </li>
+            }
+
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            @if (authState.isAuthenticated()) {
+            @if (authState.userRole() !== 'MANAGER' && authState.userRole() !== 'ADMIN') {
+            <li class="nav-item dropdown me-3">
+               <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                 <i class="bi bi-bell fs-5"></i>
+                 @if (unreadCount > 0) {
+                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                     {{ unreadCount }}
+                     <span class="visually-hidden">unread messages</span>
+                   </span>
+                 }
+               </a>
+               <ul class="dropdown-menu dropdown-menu-end shadow border p-0" style="width: 350px; max-height: 400px; overflow-y: auto;">
+                 <li class="p-2 border-bottom fw-bold bg-light d-flex justify-content-between align-items-center sticky-top">
+                    <span>Notifications</span>
+                    <small class="text-muted fw-normal cursor-pointer" (click)="loadNotifications()"><i class="bi bi-arrow-clockwise"></i> Refresh</small>
+                 </li>
+                 @for (notif of notifications; track notif.id) {
+                   <li>
+                     <a class="dropdown-item p-3 border-bottom" [class.bg-light]="!notif.read" href="#" (click)="markAsRead(notif); $event.preventDefault()">
+                       <div class="d-flex justify-content-between">
+                         <strong class="mb-1 text-truncate" [class.text-primary]="!notif.read" style="max-width: 220px;">{{ notif.title }}</strong>
+                         <small class="text-muted" style="font-size: 0.75rem;">{{ notif.sentAt | date:'shortTime' }}</small>
+                       </div>
+                       <p class="mb-0 small text-secondary text-wrap">{{ notif.message }}</p>
+                     </a>
+                   </li>
+                 } @empty {
+                   <li class="p-4 text-center text-muted">
+                      <i class="bi bi-bell-slash fs-4 d-block mb-2"></i>
+                      No new notifications
+                   </li>
+                 }
+               </ul>
+            </li>
+            }
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle me-1"></i> {{ authState.currentUser()?.email }}
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" routerLink="/profile"><i class="bi bi-person me-2"></i>Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><button class="dropdown-item text-danger" (click)="logout()"><i class="bi bi-box-arrow-right me-2"></i>Logout</button></li>
+              </ul>
+            </li>
+            }
+            @if (!authState.isAuthenticated()) {
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/register">Register</a>
+            </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </nav>

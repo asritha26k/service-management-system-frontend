@@ -1,0 +1,18 @@
+@if (ns.show()) {
+<div class="modal d-block" style="background: rgba(0,0,0,0.5); z-index: 2000;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" [ngClass]="getBorderClass()">
+            <div class="modal-body text-center p-5">
+                <div class="mb-4">
+                    <i class="bi" [ngClass]="getIconClass()" [style.color]="getIconColor()"
+                        style="font-size: 4rem;"></i>
+                </div>
+                <h4 class="mb-3">{{ ns.title() }}</h4>
+                <p class="text-muted mb-4">{{ ns.message() }}</p>
+                <button class="btn px-5 py-2 rounded-pill shadow-sm" [ngClass]="getButtonClass()"
+                    (click)="ns.hide()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+}
