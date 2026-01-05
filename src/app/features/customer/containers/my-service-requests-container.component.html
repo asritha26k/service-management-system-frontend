@@ -1,0 +1,135 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="fw-bold mb-0">My Service History</h2>
+        <p class="text-muted mb-0">Track and manage your service requests</p>
+      </div>
+      <a routerLink="/customer/create-request" class="btn btn-primary d-flex align-items-center">
+        <i class="bi bi-plus-lg me-2"></i> New Request
+      </a>
+    </div>
+
+    <div class="card border">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="bg-light border-bottom">
+              <tr>
+                <th class="ps-4">No.</th>
+                <th>Service Name</th>
+                <th>Status (Click to Sort)</th>
+                <th>Priority</th>
+                <th>Scheduled Date</th>
+                <th>Technician</th>
+                <th class="text-end pe-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (req of sortedRequests; track req.id; let i = $index) {
+              <tr class="align-middle border-bottom">
+                <td class="ps-4 text-muted small">{{ i + 1 }}</td>
+                <td>
+                  <div class="fw-bold text-primary">{{ req.serviceName ||  getServiceName(req.serviceId) }}</div>
+                </td>
+                <td>
+                  <span class="badge rounded-0 fw-normal border" 
+                        [ngClass]="getStatusBadgeClass(req.status)"
+                        (click)="sortByStatus()" style="cursor: pointer;">
+                    {{ req.status }}
+                  </span>
+                </td>
+                <td>
+                  <span [ngClass]="getPriorityClass(req.priority)">
+                    {{ req.priority }}
+                  </span>
+                </td>
+                <td>
+                    <div class="fw-bold text-primary">{{ req.preferredDate | date:'mediumDate' }}</div>
+                    <small class="text-muted">{{ req.preferredDate | date:'shortTime' }}</small>
+                </td>
+                <td>
+                  @if (req.technicianName) {
+                    <div class="fw-bold text-primary">{{ req.technicianName }}</div>
+                    <small class="text-muted d-block"><i class="bi bi-telephone pe-1"></i> {{ req.technicianPhone }}</small>
+                  } @else {
+                    <span class="text-muted small italic">Awaiting Assignment</span>
+                  }
+                </td>
+                <td class="text-end pe-4">
+                  <div class="d-flex justify-content-end gap-2">
+                    @if (req.status === 'REQUESTED') {
+                      <button 
+                              class="btn btn-sm btn-outline-primary" 
+                              (click)="openRescheduleModal(req.id)">
+                        <i class="bi bi-calendar-event me-1"></i> Reschedule
+                      </button>
+                      <button 
+                              class="btn btn-sm btn-outline-danger" 
+                              (click)="openCancelModal(req.id)">
+                        <i class="bi bi-x-circle me-1"></i> Cancel
+                      </button>
+                    }
+                    @if (req.status === 'ASSIGNED') {
+                       <span class="badge bg-light text-primary border">Technician Assigned</span>
+                    }
+
+                  </div>
+                </td>
+              </tr>
+              } @empty {
+              <tr>
+                <td colspan="7" class="text-center py-5">
+                  <i class="bi bi-inbox display-4 d-block mb-3 text-muted"></i>
+                  <p class="mb-0">You haven't made any service requests yet.</p>
+                  <a routerLink="/customer/catalog" class="btn btn-link link-dark">Browse Services</a>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap Cancellation Modal -->
+    <div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true" [ngClass]="{'show d-block': showModal}" style="background: rgba(0,0,0,0.5)">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border shadow">
+          <div class="modal-header bg-danger text-white border-0">
+            <h5 class="modal-title fw-bold">Cancel Request</h5>
+            <button type="button" class="btn-close btn-close-white" (click)="closeModal()"></button>
+          </div>
+          <div class="modal-body p-4 text-center">
+            <i class="bi bi-exclamation-triangle display-1 text-danger mb-3"></i>
+            <h4 class="fw-bold">Are you sure?</h4>
+            <p class="text-muted">This action will cancel your service request. This cannot be undone if the request has already been processed.</p>
+          </div>
+          <div class="modal-footer border-0 p-3 justify-content-center">
+            <button type="button" class="btn btn-light px-4 border" (click)="closeModal()">Keep Request</button>
+            <button type="button" class="btn btn-danger px-4" (click)="confirmCancel()">Cancel Request</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reschedule Modal -->
+    <div class="modal fade" id="rescheduleModal" tabindex="-1" aria-hidden="true" [ngClass]="{'show d-block': showRescheduleModal}" style="background: rgba(0,0,0,0.5)">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border shadow">
+          <div class="modal-header bg-primary text-white border-0">
+            <h5 class="modal-title fw-bold">Reschedule Request</h5>
+            <button type="button" class="btn-close btn-close-white" (click)="closeModal()"></button>
+          </div>
+          <div class="modal-body p-4">
+            <div class="mb-3">
+               <label class="form-label fw-bold">Select New Date & Time</label>
+               <input type="datetime-local" class="form-control" [(ngModel)]="newPreferredDate" [min]="minDate">
+               <div class="form-text text-muted">Please choose a future date and time for service.</div>
+            </div>
+          </div>
+          <div class="modal-footer border-0 p-3">
+            <button type="button" class="btn btn-light border" (click)="closeModal()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="confirmReschedule()" [disabled]="!newPreferredDate">Confirm Reschedule</button>
+          </div>
+        </div>
+      </div>
+    </div>

@@ -1,0 +1,89 @@
+<div class="row g-4 mb-4">
+      <div class="col-md-12">
+        <div class="card bg-white p-4 border">
+          <h3 class="fw-bold text-primary">Welcome back, {{ authState.currentUser()?.name }}!</h3>
+          <p class="mb-0 text-muted">You have {{ activeRequestsCount }} active service requests.</p>
+        </div>
+      </div>
+      
+      <!-- Stats Cards -->
+      <div class="col-md-3">
+        <div class="card h-100 border p-3">
+          <div class="card-body">
+            <h6 class="text-muted text-uppercase small fw-bold">Active Requests</h6>
+            <h2 class="fw-bold text-primary mb-0">{{ activeRequestsCount }}</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card h-100 border p-3">
+          <div class="card-body">
+            <h6 class="text-muted text-uppercase small fw-bold">Pending Payments</h6>
+            <h2 class="fw-bold text-primary mb-0">{{ pendingInvoicesCount }}</h2>
+          </div>
+        </div>
+      </div>
+       <div class="col-md-3">
+        <div class="card h-100 border p-3">
+          <div class="card-body">
+            <h6 class="text-muted text-uppercase small fw-bold">Completed</h6>
+            <h2 class="fw-bold text-primary mb-0">{{ completedRequestsCount }}</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card h-100 border p-3">
+          <div class="card-body">
+            <h6 class="text-muted text-uppercase small fw-bold">Total Spent</h6>
+            <h2 class="fw-bold text-primary mb-0">₹{{ totalSpent | number:'1.2-2' }}</h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="col-md-6">
+        <div class="card h-100 border p-3">
+          <div class="card-body">
+            <h5 class="card-title fw-bold mb-3 d-flex align-items-center">
+              <i class="bi bi-lightning-charge text-muted me-2"></i> Quick Actions
+            </h5>
+            <div class="d-grid gap-2">
+              <button class="btn btn-primary py-3 fw-bold" routerLink="/customer/catalog">
+                <i class="bi bi-search me-2"></i> Explore Services
+              </button>
+              <button class="btn btn-outline-primary py-3 fw-bold" routerLink="/customer/requests">
+                <i class="bi bi-clock-history me-2"></i> View All History
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Service Requests -->
+      <div class="col-md-6">
+        <div class="card h-100 border">
+          <div class="card-header bg-light py-3 border-bottom">
+            <h5 class="mb-0 fw-bold">Recent Requests</h5>
+          </div>
+          <div class="card-body p-0">
+            <ul class="list-group list-group-flush">
+              @for (req of recentRequests; track req.id) {
+              <li class="list-group-item px-3 py-3 border-bottom">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="mb-0 fw-bold text-primary">{{ req.serviceName || 'Service Request' }}</h6>
+                    <small class="text-muted">{{ req.createdAt | date:'mediumDate' }} • {{ req.priority }}</small>
+                  </div>
+                  <span class="badge rounded-0 fw-normal" [ngClass]="getStatusBadgeClass(req.status)">{{ req.status }}</span>
+                </div>
+              </li>
+              } @empty {
+              <li class="list-group-item text-center py-5 text-muted border-0">
+                No recent requests found.
+              </li>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>

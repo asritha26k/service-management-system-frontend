@@ -1,0 +1,56 @@
+<div class="mb-4">
+      <label class="form-label fw-bold">Filter by Category:</label>
+      <div class="d-flex flex-wrap gap-2">
+         <button class="btn" 
+                 [ngClass]="selectedCategoryId === '' ? 'btn-primary' : 'btn-outline-primary'" 
+                 (click)="selectCategory('')">All</button>
+         @for (cat of categories; track cat.id) {
+         <button 
+                 class="btn" 
+                 [ngClass]="selectedCategoryId === cat.id ? 'btn-primary' : 'btn-outline-primary'"
+                 (click)="selectCategory(cat.id)">
+           {{ cat.name }}
+         </button>
+         }
+      </div>
+    </div>
+
+    <div class="row">
+      @for (service of filteredServices; track service.id) {
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 border overflow-hidden">
+          @if (service.images && service.images.length > 0) {
+            <img [src]="service.images[0].url" [alt]="service.images[0].alt" class="card-img-top" style="height: 200px; object-fit: cover;" (error)="service.images = undefined">
+          } @else {
+            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+              <i class="bi bi-tools text-secondary display-4"></i>
+            </div>
+          }
+          <div class="card-body">
+            <h5 class="card-title fw-bold mb-1">{{ service.name }}</h5>
+            <h6 class="card-subtitle mb-3 text-muted border-bottom pb-2">{{ getCategoryName(service.categoryId) }}</h6>
+            <p class="card-text text-muted small mb-3">{{ service.description }}</p>
+            
+            <div class="d-flex justify-content-between align-items-center mt-auto">
+               <div>
+                 <span class="fs-4 fw-bold text-primary">₹{{ service.basePrice }}</span>
+                 @if (service.estimatedDurationMinutes) {
+                   <div class="small text-muted"><i class="bi bi-clock me-1"></i> {{ service.estimatedDurationMinutes }} mins</div>
+                 }
+               </div>
+               <span class="small text-muted border px-2 py-1 rounded"><i class="bi bi-hourglass-split me-1"></i> SLA: {{ service.slaHours }}h</span>
+            </div>
+          </div>
+          <div class="card-footer bg-white border-top-0 pb-3 pt-0">
+             <button class="btn btn-primary w-100" (click)="raiseRequest(service)">
+               {{ authState.isAuthenticated() ? 'Request Service' : 'Login to Request' }}
+             </button>
+          </div>
+        </div>
+      </div>
+      } @empty {
+      <div class="col-12 text-center">
+         <p>No services found in this category.</p>
+      </div>
+      }
+    </div>
