@@ -1,0 +1,118 @@
+<div class="container my-4">
+      <div class="d-flex align-items-center mb-4">
+        <button class="btn btn-outline-secondary me-3" routerLink="/manager/requests">
+          <i class="bi bi-arrow-left"></i> Back
+        </button>
+        <h2 class="fw-bold mb-0">Assign Technician</h2>
+      </div>
+
+      @if (isLoading) {
+        <div class="text-center py-5">
+           <div class="spinner-border text-primary" role="status">
+             <span class="visually-hidden">Loading...</span>
+           </div>
+        </div>
+      } @else if (request) {
+        <div class="row g-4">
+          <!-- Request & Service Details -->
+          <div class="col-md-5">
+             <div class="card shadow-sm border-0 mb-3">
+               <div class="card-header bg-white fw-bold">Request Details</div>
+               <div class="card-body">
+                 <div class="mb-3">
+                   <small class="text-muted d-block">REQUEST ID</small>
+                   <span class="fw-bold">{{ request.id }}</span>
+                 </div>
+                 <div class="mb-3">
+                   <small class="text-muted d-block">CUSTOMER</small>
+                   <span>{{ request.customerName }}</span>
+                 </div>
+                 <div class="mb-3">
+                   <small class="text-muted d-block">ADDRESS</small>
+                   <span class="text-break">{{ request.address }}</span>
+                 </div>
+                 <div class="mb-3">
+                   <small class="text-muted d-block">PRIORITY</small>
+                   <span class="badge" [ngClass]="{
+                     'bg-danger': request.priority === 'HIGH',
+                     'bg-warning': request.priority === 'MEDIUM',
+                     'bg-success': request.priority === 'LOW'
+                   }">{{ request.priority }}</span>
+                 </div>
+               </div>
+             </div>
+
+             <div class="card shadow-sm border-0">
+               <div class="card-header bg-white fw-bold">Service Details</div>
+               <div class="card-body">
+                 @if (isLoadingService) {
+                   <div class="spinner-border spinner-border-sm text-primary" role="status">
+                     <span class="visually-hidden">Loading...</span>
+                   </div>
+                 } @else if (serviceDetail) {
+                   <h5 class="fw-bold text-primary">{{ serviceDetail.name }}</h5>
+                   <p class="text-muted small">{{ serviceDetail.description }}</p>
+                   <div class="fw-bold fs-5">{{ serviceDetail.basePrice | currency }}</div>
+                 } @else {
+                    <div class="text-danger">Failed to load service details.</div>
+                 }
+               </div>
+             </div>
+          </div>
+
+          <!-- Technician Selection -->
+          <div class="col-md-7">
+            <div class="card shadow-sm border-0 h-100">
+               <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
+                 <span>Select Technician</span>
+                 <span class="badge bg-primary">{{ filteredTechnicians.length }} Available</span>
+               </div>
+               <div class="card-body">
+                 <div class="input-group mb-3">
+                   <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+                   <input type="text" class="form-control border-start-0 bg-light" placeholder="Search by name or specialization..." 
+                          [(ngModel)]="searchTerm" (ngModelChange)="filterTechnicians()">
+                 </div>
+
+                 <div class="list-group list-group-flush border rounded overflow-auto" style="max-height: 500px;">
+                    @for (tech of filteredTechnicians; track tech.id) {
+                      <button class="list-group-item list-group-item-action p-3"
+                              [class.active]="selectedTechnicianId === tech.id"
+                              (click)="selectTechnician(tech.id)">
+                         <div class="d-flex w-100 justify-content-between align-items-center mb-1">
+                           <h6 class="mb-0 fw-bold">{{ tech.name }}</h6>
+                           <span class="badge" [ngClass]="getWorkloadBadgeClass(tech.currentWorkload, tech.maxWorkload)">
+                             Load: {{ tech.currentWorkload }}/{{ tech.maxWorkload }}
+                           </span>
+                         </div>
+                         <p class="mb-1 small">{{ tech.specialization }}</p>
+                         <small [class.text-white-50]="selectedTechnicianId === tech.id" [class.text-muted]="selectedTechnicianId !== tech.id">
+                           <i class="bi bi-geo-alt me-1"></i> {{ tech.location || 'Location not available' }}
+                         </small>
+                      </button>
+                    }
+                    @if (filteredTechnicians.length === 0) {
+                      <div class="text-center p-5 text-muted">
+                        <i class="bi bi-person-x display-4 mb-3 d-block"></i>
+                        No technicians found.
+                      </div>
+                    }
+                 </div>
+               </div>
+               <div class="card-footer bg-white border-top-0 p-3 text-end">
+                  <button class="btn btn-primary px-4" [disabled]="!selectedTechnicianId || isAssigning" (click)="confirmAssignment()">
+                    @if (isAssigning) {
+                      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      Assigning...
+                    } @else {
+                      Confirm Assignment
+                    }
+                  </button>
+               </div>
+            </div>
+          </div>
+        </div>
+      } @else {
+         <div class="alert alert-danger">Request not found.</div>
+      }
+    </div>

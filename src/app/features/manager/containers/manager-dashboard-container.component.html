@@ -1,0 +1,52 @@
+<div class="row g-4">
+      <div class="col-md-12">
+        <div class="card bg-primary text-white p-4 shadow-sm border-0">
+          <h3 class="fw-bold">Manager Control Panel</h3>
+          <p class="mb-0">Oversee service requests, assign technicians, and approve new applications.</p>
+        </div>
+      </div>
+
+      @if (technicianWorkload) {
+      <div class="col-md-12">
+        <div class="card bg-light border-0 shadow-sm">
+          <div class="card-body">
+            <h6 class="card-title fw-bold text-uppercase opacity-75 mb-3">Technician Workload</h6>
+            <div class="row text-center">
+              <div class="col-md-4 border-end">
+                <small class="text-muted d-block">Total Technicians</small>
+                <h4 class="fw-bold text-primary mb-0">{{ technicianWorkload.totalTechnicians }}</h4>
+              </div>
+              <div class="col-md-4 border-end">
+                <small class="text-muted d-block">Available Technicians</small>
+                <h4 class="fw-bold text-success mb-0">{{ technicianWorkload.availableTechnicians }}</h4>
+              </div>
+              <div class="col-md-4">
+                <small class="text-muted d-block">Avg Workload Ratio</small>
+                <h4 class="fw-bold text-primary mb-0">{{ technicianWorkload.averageWorkloadRatio | number:'1.2-2' }}%</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+      
+      <div class="col-md-6">
+        <div class="card h-100 shadow-sm border-0 p-3">
+          <div class="card-body">
+            <h5 class="card-title fw-bold mb-3">Service Requests</h5>
+            <p>Monitor all incoming and active service requests. Assign them to available technicians.</p>
+            <button class="btn btn-primary text-white" routerLink="/manager/requests">Manage Requests</button>
+          </div>
+        </div>
+      </div>
+
+       <div class="col-md-6">
+        <div class="card h-100 shadow-sm border-0 p-3">
+          <div class="card-body">
+            <h5 class="card-title fw-bold mb-3">Technician Approvals</h5>
+            <p>Review applications from new technicians and approve or reject them.</p>
+            <button class="btn btn-outline-primary" routerLink="/manager/approvals">View Applications</button>
+          </div>
+        </div>
+      </div>
+    </div>
