@@ -39,8 +39,19 @@ export class LoginFormContainerComponent {
         },
         error: (err) => {
           this.isLoading = false;
-          this.errorMessage = 'Invalid email or password';
-          console.error(err);
+          // Extract user-friendly message from backend error response
+          if (err.error?.message) {
+            this.errorMessage = err.error.message;
+          } else if (err.status === 400) {
+            this.errorMessage = 'Invalid email or password. Please check your credentials and try again.';
+          } else if (err.status === 401) {
+            this.errorMessage = 'Authentication failed. Invalid email or password.';
+          } else if (err.status === 0) {
+            this.errorMessage = 'Cannot connect to server. Please check your internet connection.';
+          } else {
+            this.errorMessage = 'Login failed. Please try again later.';
+          }
+          console.error('Login error:', err);
         }
       });
     } else {
