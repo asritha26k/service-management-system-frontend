@@ -18,7 +18,7 @@
         [ngClass]="{'is-invalid': requestForm.get('serviceId')?.touched && requestForm.get('serviceId')?.invalid}">
         <option value="">Select Service</option>
         @for (service of filteredServices; track service.id) {
-        <option [value]="service.id">{{ service.name }} - ₹{{ service.basePrice }}</option>
+        <option [value]="service.id">{{ service.name }} - ₹{{ service.basePrice | number:'1.2-2' }}</option>
         }
       </select>
       @if (requestForm.get('serviceId')?.touched && requestForm.get('serviceId')?.invalid) {
@@ -48,7 +48,8 @@
             </div>
 
             <div class="d-flex align-items-center gap-3 mt-2">
-              <span class="badge bg-white text-primary border fs-6 px-3 py-2">₹{{ preSelectedService.basePrice }}</span>
+              <span class="badge bg-white text-primary border fs-6 px-3 py-2">₹{{ preSelectedService.basePrice |
+                number:'1.2-2' }}</span>
               <span class="text-muted small"><i class="bi bi-hourglass-split me-1"></i> SLA: {{
                 preSelectedService.slaHours }}h</span>
               @if (preSelectedService.estimatedDurationMinutes) {
@@ -69,28 +70,52 @@
           <input type="text" class="form-control" formControlName="street" placeholder="House No / Street Name"
             [ngClass]="{'is-invalid': requestForm.get('street')?.touched && requestForm.get('street')?.invalid}">
           @if (requestForm.get('street')?.touched && requestForm.get('street')?.invalid) {
-          <div class="invalid-feedback">Street address is required.</div>
+          <div class="invalid-feedback">
+            @if (requestForm.get('street')?.errors?.['required']) {
+            Street address is required.
+            } @else if (requestForm.get('street')?.errors?.['minlength']) {
+            Street must be at least 5 characters.
+            }
+          </div>
           }
         </div>
         <div class="col-md-5">
           <input type="text" class="form-control" formControlName="city" placeholder="City"
             [ngClass]="{'is-invalid': requestForm.get('city')?.touched && requestForm.get('city')?.invalid}">
           @if (requestForm.get('city')?.touched && requestForm.get('city')?.invalid) {
-          <div class="invalid-feedback">City is required.</div>
+          <div class="invalid-feedback">
+            @if (requestForm.get('city')?.errors?.['required']) {
+            City is required.
+            } @else if (requestForm.get('city')?.errors?.['minlength']) {
+            City must be at least 2 characters.
+            }
+          </div>
           }
         </div>
         <div class="col-md-4">
           <input type="text" class="form-control" formControlName="state" placeholder="State"
             [ngClass]="{'is-invalid': requestForm.get('state')?.touched && requestForm.get('state')?.invalid}">
           @if (requestForm.get('state')?.touched && requestForm.get('state')?.invalid) {
-          <div class="invalid-feedback">State is required.</div>
+          <div class="invalid-feedback">
+            @if (requestForm.get('state')?.errors?.['required']) {
+            State is required.
+            } @else if (requestForm.get('state')?.errors?.['minlength']) {
+            State must be at least 2 characters.
+            }
+          </div>
           }
         </div>
         <div class="col-md-3">
           <input type="text" class="form-control" formControlName="zipCode" placeholder="Zip Code"
             [ngClass]="{'is-invalid': requestForm.get('zipCode')?.touched && requestForm.get('zipCode')?.invalid}">
           @if (requestForm.get('zipCode')?.touched && requestForm.get('zipCode')?.invalid) {
-          <div class="invalid-feedback">Zip Code is required.</div>
+          <div class="invalid-feedback">
+            @if (requestForm.get('zipCode')?.errors?.['required']) {
+            ZIP code is required.
+            } @else if (requestForm.get('zipCode')?.errors?.['pattern']) {
+            Invalid ZIP code format (use 12345 or 12345-6789).
+            }
+          </div>
           }
         </div>
       </div>

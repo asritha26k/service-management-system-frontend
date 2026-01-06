@@ -21,16 +21,26 @@ export class CatalogServiceContainerComponent implements OnInit {
 
   createForm = this.fb.group({
     categoryId: ['', Validators.required],
-    name: ['', Validators.required],
-    description: ['', Validators.required],
-    basePrice: [0, [Validators.required, Validators.min(0)]],
-    slaHours: [24, [Validators.required, Validators.min(1)]],
-    estimatedDurationMinutes: [60, [Validators.required, Validators.min(1)]],
+    name: ['', [Validators.required, Validators.minLength(3)]],
+    description: ['', [Validators.required, Validators.minLength(10)]],
+    basePrice: [0, [Validators.required, Validators.min(0), Validators.max(999999)]],
+    slaHours: [24, [Validators.required, Validators.min(1), Validators.max(720)]],
+    estimatedDurationMinutes: [60, [Validators.required, Validators.min(1), Validators.max(1440)]],
     images: this.fb.array([])
   });
 
   get images() {
     return this.createForm.get('images') as FormArray;
+  }
+
+  isInvalid(field: string) {
+    const ctrl = this.createForm.get(field);
+    return ctrl?.touched && ctrl?.invalid;
+  }
+
+  isImageInvalid(index: number, field: string) {
+    const ctrl = this.images.at(index).get(field);
+    return ctrl?.touched && ctrl?.invalid;
   }
 
   ngOnInit() {
@@ -78,6 +88,12 @@ export class CatalogServiceContainerComponent implements OnInit {
       this.catalogService.createService(this.createForm.value as any).subscribe(() => {
         this.loadData();
         this.closeModal();
+      });
+    } else {
+      this.createForm.markAllAsTouched();
+      // Also mark all images controls as touched
+      this.images.controls.forEach(control => {
+        control.markAllAsTouched();
       });
     }
   }

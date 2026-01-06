@@ -31,9 +31,9 @@ export class CreateServiceRequestContainerComponent implements OnInit {
 
   requestForm = this.fb.group({
     serviceId: ['', Validators.required],
-    street: ['', Validators.required],
-    city: ['', Validators.required],
-    state: ['', Validators.required],
+    street: ['', [Validators.required, Validators.minLength(5)]],
+    city: ['', [Validators.required, Validators.minLength(2)]],
+    state: ['', [Validators.required, Validators.minLength(2)]],
     zipCode: ['', [Validators.required, Validators.pattern('^[0-9]{5}(?:-[0-9]{4})?$')]],
     priority: ['MEDIUM', Validators.required],
     preferredDate: ['', Validators.required]

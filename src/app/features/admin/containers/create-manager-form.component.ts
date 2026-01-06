@@ -20,9 +20,9 @@ export class CreateManagerFormContainerComponent {
   isSubmitting = false;
 
   form = this.fb.group({
-    name: ['', [Validators.required]],
+    name: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.required]]
+    phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]]
   });
 
   isInvalid(field: string) {

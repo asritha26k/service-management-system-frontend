@@ -9,25 +9,46 @@
 
           <div class="mb-3">
             <label class="form-label">Name</label>
-            <input type="text" class="form-control" formControlName="name">
+            <input type="text" class="form-control" formControlName="name"
+              [ngClass]="{'is-invalid': isInvalid('name')}">
             @if (isInvalid('name')) {
-            <div class="invalid-feedback d-block">Required.</div>
+            <div class="invalid-feedback d-block">
+              @if (form.get('name')?.errors?.['required']) {
+              Name is required.
+              } @else if (form.get('name')?.errors?.['minlength']) {
+              Name must be at least 2 characters long.
+              }
+            </div>
             }
           </div>
 
           <div class="mb-3">
             <label class="form-label">Email</label>
-            <input type="email" class="form-control" formControlName="email">
+            <input type="email" class="form-control" formControlName="email"
+              [ngClass]="{'is-invalid': isInvalid('email')}">
             @if (isInvalid('email')) {
-            <div class="invalid-feedback d-block">Valid email required.</div>
+            <div class="invalid-feedback d-block">
+              @if (form.get('email')?.errors?.['required']) {
+              Email is required.
+              } @else if (form.get('email')?.errors?.['email']) {
+              Please enter a valid email address.
+              }
+            </div>
             }
           </div>
 
           <div class="mb-3">
             <label class="form-label">Phone</label>
-            <input type="text" class="form-control" formControlName="phone">
+            <input type="text" class="form-control" formControlName="phone" placeholder="1234567890"
+              [ngClass]="{'is-invalid': isInvalid('phone')}">
             @if (isInvalid('phone')) {
-            <div class="invalid-feedback d-block">Required.</div>
+            <div class="invalid-feedback d-block">
+              @if (form.get('phone')?.errors?.['required']) {
+              Phone number is required.
+              } @else if (form.get('phone')?.errors?.['pattern']) {
+              Please enter a valid 10-digit phone number.
+              }
+            </div>
             }
           </div>
 

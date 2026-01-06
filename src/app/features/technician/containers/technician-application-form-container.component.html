@@ -35,12 +35,24 @@
             <div class="col-md-4 mb-3">
                <label class="form-label fw-bold">City</label>
                <input type="text" class="form-control" formControlName="city">
-               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('city')">Required.</div>
+               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('city')">
+                  @if (form.get('city')?.errors?.['required']) {
+                  City is required.
+                  } @else if (form.get('city')?.errors?.['minlength']) {
+                  City must be at least 2 characters.
+                  }
+               </div>
             </div>
             <div class="col-md-4 mb-3">
                <label class="form-label fw-bold">State</label>
                <input type="text" class="form-control" formControlName="state">
-               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('state')">Required.</div>
+               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('state')">
+                  @if (form.get('state')?.errors?.['required']) {
+                  State is required.
+                  } @else if (form.get('state')?.errors?.['minlength']) {
+                  State must be at least 2 characters.
+                  }
+               </div>
             </div>
             <div class="col-md-4 mb-3">
                <label class="form-label fw-bold">Zip Code</label>
@@ -53,8 +65,14 @@
          <div class="row">
             <div class="col-md-6 mb-3">
                <label class="form-label fw-bold">Experience (Years)</label>
-               <input type="number" class="form-control" formControlName="experience">
-               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('experience')">Required.</div>
+               <input type="number" class="form-control" formControlName="experience" min="1">
+               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('experience')">
+                  @if (form.get('experience')?.errors?.['required']) {
+                  Experience is required.
+                  } @else if (form.get('experience')?.errors?.['min']) {
+                  Minimum 1 year of experience required.
+                  }
+               </div>
             </div>
             <div class="col-md-6 mb-3">
                <label class="form-label fw-bold">Specialization</label>
@@ -78,18 +96,29 @@
          </div>
 
          <div class="mb-3">
-            <label class="form-label fw-bold">Certifications</label>
+            <label class="form-label fw-bold">Certifications <span class="text-muted small">(Optional)</span></label>
             <input type="text" class="form-control" formControlName="certifications">
+            @if (form.get('certifications')?.touched && form.get('certifications')?.errors?.['minlength']) {
+            <div class="invalid-feedback d-block">Certifications must be at least 3 characters if provided.</div>
+            }
          </div>
 
          <div class="mb-3">
-            <label class="form-label fw-bold">Previous Employer</label>
+            <label class="form-label fw-bold">Previous Employer <span class="text-muted small">(Optional)</span></label>
             <input type="text" class="form-control" formControlName="previousEmployer">
+            @if (form.get('previousEmployer')?.touched && form.get('previousEmployer')?.errors?.['minlength']) {
+            <div class="invalid-feedback d-block">Employer name must be at least 2 characters if provided.</div>
+            }
          </div>
 
          <div class="mb-3">
-            <label class="form-label fw-bold">Work Experience Details</label>
+            <label class="form-label fw-bold">Work Experience Details <span
+                  class="text-muted small">(Optional)</span></label>
             <textarea class="form-control" formControlName="workExperienceDetails" rows="3"></textarea>
+            @if (form.get('workExperienceDetails')?.touched && form.get('workExperienceDetails')?.errors?.['minlength'])
+            {
+            <div class="invalid-feedback d-block">Experience details must be at least 10 characters if provided.</div>
+            }
          </div>
 
          <h5 class="mt-4 mb-3 border-bottom pb-2 fw-bold text-primary">Availability & Preferences</h5>
@@ -111,25 +140,46 @@
          </div>
 
          <div class="mb-3">
-            <label class="form-label fw-bold">Availability (Days/Hours)</label>
+            <label class="form-label fw-bold">Availability (Days/Hours) <span
+                  class="text-muted small">(Optional)</span></label>
             <input type="text" class="form-control" formControlName="availability" placeholder="e.g. Mon-Fri 9-5">
+            @if (form.get('availability')?.touched && form.get('availability')?.errors?.['minlength']) {
+            <div class="invalid-feedback d-block">Availability must be at least 3 characters if provided.</div>
+            }
          </div>
 
          <h5 class="mt-4 mb-3 border-bottom pb-2 fw-bold text-primary">Emergency Contact</h5>
          <div class="row">
             <div class="col-md-6 mb-3">
-               <label class="form-label fw-bold">Contact Name</label>
+               <label class="form-label fw-bold">Contact Name <span class="text-muted small">(Optional)</span></label>
                <input type="text" class="form-control" formControlName="emergencyContactName">
+               @if (form.get('emergencyContactName')?.touched && form.get('emergencyContactName')?.invalid) {
+               <div class="invalid-feedback d-block">
+                  @if (form.get('emergencyContactName')?.errors?.['minlength']) {
+                  Name must be at least 2 characters.
+                  } @else if (form.get('emergencyContactName')?.errors?.['pattern']) {
+                  Name should only contain letters and spaces.
+                  }
+               </div>
+               }
             </div>
             <div class="col-md-6 mb-3">
-               <label class="form-label fw-bold">Contact Phone</label>
+               <label class="form-label fw-bold">Contact Phone <span class="text-muted small">(Optional)</span></label>
                <input type="text" class="form-control" formControlName="emergencyContactPhone">
+               @if (form.get('emergencyContactPhone')?.touched &&
+               form.get('emergencyContactPhone')?.errors?.['pattern']) {
+               <div class="invalid-feedback d-block">Phone must be 10-12 digits.</div>
+               }
             </div>
          </div>
 
          <div class="mb-4">
-            <label class="form-label fw-bold">Motivation For Joining</label>
+            <label class="form-label fw-bold">Motivation For Joining <span
+                  class="text-muted small">(Optional)</span></label>
             <textarea class="form-control" formControlName="motivation" rows="3"></textarea>
+            @if (form.get('motivation')?.touched && form.get('motivation')?.errors?.['minlength']) {
+            <div class="invalid-feedback d-block">Motivation must be at least 10 characters if provided.</div>
+            }
          </div>
 
          <div class="d-flex flex-column gap-2">

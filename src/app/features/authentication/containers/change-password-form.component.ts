@@ -33,6 +33,15 @@ export class ChangePasswordFormContainerComponent {
        ? null : { mismatch: true };
   }
 
+  // Password validation getters for UI feedback
+  get newPassControl() { return this.form.get('newPassword'); }
+  
+  get hasMinLength() { return this.newPassControl?.errors?.['minlength'] || this.newPassControl?.errors?.['required']; }
+  get hasUpperCase() { return !/[A-Z]/.test(this.newPassControl?.value || ''); }
+  get hasLowerCase() { return !/[a-z]/.test(this.newPassControl?.value || ''); }
+  get hasNumber() { return !/\d/.test(this.newPassControl?.value || ''); }
+  get hasSpecialChar() { return !/[@$!%*?&]/.test(this.newPassControl?.value || ''); }
+
   onSubmit() {
     if (this.form.valid) {
       this.isLoading = true;

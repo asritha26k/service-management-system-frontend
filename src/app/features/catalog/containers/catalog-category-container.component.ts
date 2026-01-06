@@ -18,9 +18,14 @@ export class CatalogCategoryContainerComponent implements OnInit {
   showCreateModal = false;
 
   createForm = this.fb.group({
-    name: ['', Validators.required],
-    description: ['', Validators.required]
+    name: ['', [Validators.required, Validators.minLength(3)]],
+    description: ['', [Validators.required, Validators.minLength(10)]]
   });
+
+  isInvalid(field: string) {
+    const ctrl = this.createForm.get(field);
+    return ctrl?.touched && ctrl?.invalid;
+  }
 
   ngOnInit() {
     this.loadCategories();
@@ -38,6 +43,8 @@ export class CatalogCategoryContainerComponent implements OnInit {
         this.loadCategories();
         this.closeModal();
       });
+    } else {
+      this.createForm.markAllAsTouched();
     }
   }
 

@@ -24,22 +24,22 @@ export class TechnicianApplicationFormContainerComponent {
     email: ['', [Validators.required, Validators.email]],
     phone: ['', [Validators.required, Validators.pattern('^[0-9]{10,12}$')]],
     address: ['', [Validators.required, Validators.minLength(10)]],
-    city: ['', Validators.required],
-    state: ['', Validators.required],
+    city: ['', [Validators.required, Validators.minLength(2)]],
+    state: ['', [Validators.required, Validators.minLength(2)]],
     zipCode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
-    experience: [0, [Validators.required, Validators.min(0)]],
+    experience: [1, [Validators.required, Validators.min(1)]],
     specialization: ['', Validators.required],
     skills: this.fb.array<string>([]), 
-    certifications: [''],
-    previousEmployer: [''],
-    workExperienceDetails: [''],
+    certifications: ['', Validators.minLength(3)],
+    previousEmployer: ['', Validators.minLength(2)],
+    workExperienceDetails: ['', Validators.minLength(10)],
     maxWorkload: [5, [Validators.required, Validators.min(1), Validators.max(20)]],
     hasVehicle: [false],
     hasToolkit: [false],
-    availability: [''],
-    emergencyContactName: [''],
-    emergencyContactPhone: [''],
-    motivation: ['']
+    availability: ['', Validators.minLength(3)],
+    emergencyContactName: ['', [Validators.minLength(2), Validators.pattern('^[a-zA-Z\\s]*$')]],
+    emergencyContactPhone: ['', Validators.pattern('^[0-9]{10,12}$')],
+    motivation: ['', Validators.minLength(10)]
   });
 
   get skillsFormArray() {
