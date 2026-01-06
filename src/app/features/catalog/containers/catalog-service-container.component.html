@@ -80,6 +80,10 @@
               Service name is required.
               } @else if (createForm.get('name')?.errors?.['minlength']) {
               Service name must be at least 3 characters long.
+              } @else if (createForm.get('name')?.errors?.['alphanumericWithSpaces']) {
+              Service name contains invalid characters.
+              } @else if (createForm.get('name')?.errors?.['whitespace']) {
+              Service name cannot be only spaces.
               }
             </div>
             }
@@ -94,6 +98,10 @@
               Description is required.
               } @else if (createForm.get('description')?.errors?.['minlength']) {
               Description must be at least 10 characters long.
+              } @else if (createForm.get('description')?.errors?.['alphanumericWithSpaces']) {
+              Description contains invalid characters.
+              } @else if (createForm.get('description')?.errors?.['whitespace']) {
+              Description cannot be only spaces.
               }
             </div>
             }
@@ -167,7 +175,13 @@
                     <input type="text" class="form-control form-control-sm" formControlName="url"
                       placeholder="https://..." [ngClass]="{'is-invalid': isImageInvalid($index, 'url')}">
                     @if (isImageInvalid($index, 'url')) {
-                    <div class="invalid-feedback d-block">Image URL is required.</div>
+                    <div class="invalid-feedback d-block">
+                      @if (images.at($index).get('url')?.errors?.['required']) {
+                      Image URL is required.
+                      } @else if (images.at($index).get('url')?.errors?.['invalidUrl']) {
+                      Please enter a valid URL.
+                      }
+                    </div>
                     }
                   </div>
                   <div class="col-md-5">
@@ -175,7 +189,15 @@
                     <input type="text" class="form-control form-control-sm" formControlName="alt"
                       placeholder="Description" [ngClass]="{'is-invalid': isImageInvalid($index, 'alt')}">
                     @if (isImageInvalid($index, 'alt')) {
-                    <div class="invalid-feedback d-block">Alt text is required.</div>
+                    <div class="invalid-feedback d-block">
+                      @if (images.at($index).get('alt')?.errors?.['required']) {
+                      Alt text is required.
+                      } @else if (images.at($index).get('alt')?.errors?.['alphanumericWithSpaces']) {
+                      Alt text contains invalid characters.
+                      } @else if (images.at($index).get('alt')?.errors?.['whitespace']) {
+                      Alt text cannot be only spaces.
+                      }
+                    </div>
                     }
                   </div>
                   <div class="col-md-2 text-end">

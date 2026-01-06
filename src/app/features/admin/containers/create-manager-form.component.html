@@ -17,6 +17,10 @@
               Name is required.
               } @else if (form.get('name')?.errors?.['minlength']) {
               Name must be at least 2 characters long.
+              } @else if (form.get('name')?.errors?.['alphaWithSpaces']) {
+              Name must contain only letters and spaces.
+              } @else if (form.get('name')?.errors?.['whitespace']) {
+              Name cannot be only spaces.
               }
             </div>
             }

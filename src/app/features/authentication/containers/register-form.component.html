@@ -18,7 +18,19 @@
               formControlName="name"
               [ngClass]="{'is-invalid': registerForm.get('name')?.touched && registerForm.get('name')?.invalid}"
             >
-            <div class="invalid-feedback">Name is required.</div>
+            @if (registerForm.get('name')?.touched && registerForm.get('name')?.invalid) {
+            <div class="invalid-feedback d-block">
+              @if (registerForm.get('name')?.errors?.['required']) {
+              Name is required.
+              } @else if (registerForm.get('name')?.errors?.['minlength']) {
+              Name must be at least 2 characters.
+              } @else if (registerForm.get('name')?.errors?.['alphaWithSpaces']) {
+              Name must contain only letters and spaces.
+              } @else if (registerForm.get('name')?.errors?.['whitespace']) {
+              Name cannot be only spaces.
+              }
+            </div>
+            }
           </div>
 
           <div class="mb-3">
@@ -42,7 +54,19 @@
               formControlName="address"
               [ngClass]="{'is-invalid': registerForm.get('address')?.touched && registerForm.get('address')?.invalid}"
             >
-             <div class="invalid-feedback">Address is required.</div>
+             @if (registerForm.get('address')?.touched && registerForm.get('address')?.invalid) {
+             <div class="invalid-feedback d-block">
+               @if (registerForm.get('address')?.errors?.['required']) {
+               Address is required.
+               } @else if (registerForm.get('address')?.errors?.['minlength']) {
+               Address must be at least 10 characters.
+               } @else if (registerForm.get('address')?.errors?.['invalidAddress']) {
+               Address contains invalid characters.
+               } @else if (registerForm.get('address')?.errors?.['whitespace']) {
+               Address cannot be only spaces.
+               }
+             </div>
+             }
           </div>
 
           <div class="mb-3">

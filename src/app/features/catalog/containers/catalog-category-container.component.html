@@ -36,6 +36,10 @@
               Category name is required.
               } @else if (createForm.get('name')?.errors?.['minlength']) {
               Category name must be at least 3 characters long.
+              } @else if (createForm.get('name')?.errors?.['alphanumericWithSpaces']) {
+              Category name contains invalid characters.
+              } @else if (createForm.get('name')?.errors?.['whitespace']) {
+              Category name cannot be only spaces.
               }
             </div>
             }
@@ -50,6 +54,10 @@
               Description is required.
               } @else if (createForm.get('description')?.errors?.['minlength']) {
               Description must be at least 10 characters long.
+              } @else if (createForm.get('description')?.errors?.['alphanumericWithSpaces']) {
+              Description contains invalid characters.
+              } @else if (createForm.get('description')?.errors?.['whitespace']) {
+              Description cannot be only spaces.
               }
             </div>
             }

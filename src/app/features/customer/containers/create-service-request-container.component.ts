@@ -7,6 +7,7 @@ import { CatalogService } from '../../catalog/services/catalog.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ServiceCategory, ServiceItem } from '../../catalog/models/catalog.models';
 import { CreateServiceRequestRequest } from '../models/service-request.models';
+import { alphabeticOnlyValidator, addressValidator, noWhitespaceValidator } from '../../../shared/validators/custom-validators';
 
 @Component({
   selector: 'app-create-service-request-container',
@@ -31,9 +32,9 @@ export class CreateServiceRequestContainerComponent implements OnInit {
 
   requestForm = this.fb.group({
     serviceId: ['', Validators.required],
-    street: ['', [Validators.required, Validators.minLength(5)]],
-    city: ['', [Validators.required, Validators.minLength(2)]],
-    state: ['', [Validators.required, Validators.minLength(2)]],
+    street: ['', [Validators.required, Validators.minLength(5), addressValidator(), noWhitespaceValidator()]],
+    city: ['', [Validators.required, Validators.minLength(2), alphabeticOnlyValidator(), noWhitespaceValidator()]],
+    state: ['', [Validators.required, Validators.minLength(2), alphabeticOnlyValidator(), noWhitespaceValidator()]],
     zipCode: ['', [Validators.required, Validators.pattern('^[0-9]{5}(?:-[0-9]{4})?$')]],
     priority: ['MEDIUM', Validators.required],
     preferredDate: ['', Validators.required]

@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CatalogService } from '../services/catalog.service';
 import { ServiceCategory } from '../models/catalog.models';
+import { alphanumericWithSpacesValidator, noWhitespaceValidator } from '../../../shared/validators/custom-validators';
 
 @Component({
   selector: 'app-catalog-category-container',
@@ -18,8 +19,8 @@ export class CatalogCategoryContainerComponent implements OnInit {
   showCreateModal = false;
 
   createForm = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(3)]],
-    description: ['', [Validators.required, Validators.minLength(10)]]
+    name: ['', [Validators.required, Validators.minLength(3), alphanumericWithSpacesValidator(), noWhitespaceValidator()]],
+    description: ['', [Validators.required, Validators.minLength(10), alphanumericWithSpacesValidator(), noWhitespaceValidator()]]
   });
 
   isInvalid(field: string) {

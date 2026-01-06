@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserProfileService } from '../services/user-profile.service';
 import { UserProfileResponse } from '../models/user-profile.models';
 import { NotificationService } from '../../../core/services/notification.service';
+import { alphaWithSpacesValidator, alphabeticOnlyValidator, addressValidator, noWhitespaceValidator } from '../../../shared/validators/custom-validators';
 
 @Component({
   selector: 'app-user-profile-container',
@@ -23,11 +24,11 @@ export class UserProfileContainerComponent implements OnInit {
   isNewProfile = false;
 
   form = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(2)]],
+    name: ['', [Validators.required, Validators.minLength(2), alphaWithSpacesValidator(), noWhitespaceValidator()]],
     phone: ['', [Validators.required, Validators.pattern('^[0-9]{10,12}$')]],
-    address: ['', [Validators.required, Validators.minLength(10)]],
-    city: ['', [Validators.required, Validators.minLength(2)]],
-    state: ['', [Validators.required, Validators.minLength(2)]],
+    address: ['', [Validators.required, Validators.minLength(10), addressValidator(), noWhitespaceValidator()]],
+    city: ['', [Validators.required, Validators.minLength(2), alphabeticOnlyValidator(), noWhitespaceValidator()]],
+    state: ['', [Validators.required, Validators.minLength(2), alphabeticOnlyValidator(), noWhitespaceValidator()]],
     pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
   });
 

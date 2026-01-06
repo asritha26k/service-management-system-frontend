@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators, FormArray } from '@angula
 import { CommonModule } from '@angular/common';
 import { CatalogService } from '../services/catalog.service';
 import { ServiceCategory, ServiceItem } from '../models/catalog.models';
+import { alphanumericWithSpacesValidator, noWhitespaceValidator, urlValidator } from '../../../shared/validators/custom-validators';
 
 @Component({
   selector: 'app-catalog-service-container',
@@ -21,8 +22,8 @@ export class CatalogServiceContainerComponent implements OnInit {
 
   createForm = this.fb.group({
     categoryId: ['', Validators.required],
-    name: ['', [Validators.required, Validators.minLength(3)]],
-    description: ['', [Validators.required, Validators.minLength(10)]],
+    name: ['', [Validators.required, Validators.minLength(3), alphanumericWithSpacesValidator(), noWhitespaceValidator()]],
+    description: ['', [Validators.required, Validators.minLength(10), alphanumericWithSpacesValidator(), noWhitespaceValidator()]],
     basePrice: [0, [Validators.required, Validators.min(0), Validators.max(999999)]],
     slaHours: [24, [Validators.required, Validators.min(1), Validators.max(720)]],
     estimatedDurationMinutes: [60, [Validators.required, Validators.min(1), Validators.max(1440)]],
@@ -73,8 +74,8 @@ export class CatalogServiceContainerComponent implements OnInit {
 
   addImage() {
     const imageGroup = this.fb.group({
-      url: ['', Validators.required],
-      alt: ['', Validators.required]
+      url: ['', [Validators.required, urlValidator()]],
+      alt: ['', [Validators.required, alphanumericWithSpacesValidator(), noWhitespaceValidator()]]
     });
     this.images.push(imageGroup);
   }

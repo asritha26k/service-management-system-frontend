@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../authentication/services/auth.service';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../../core/services/notification.service';
+import { alphaWithSpacesValidator, noWhitespaceValidator } from '../../../shared/validators/custom-validators';
 
 @Component({
   selector: 'app-create-manager-form',
@@ -20,7 +21,7 @@ export class CreateManagerFormContainerComponent {
   isSubmitting = false;
 
   form = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(2)]],
+    name: ['', [Validators.required, Validators.minLength(2), alphaWithSpacesValidator(), noWhitespaceValidator()]],
     email: ['', [Validators.required, Validators.email]],
     phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]]
   });

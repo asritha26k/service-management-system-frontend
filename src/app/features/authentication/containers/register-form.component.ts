@@ -4,6 +4,7 @@ import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Va
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { alphaWithSpacesValidator, addressValidator, noWhitespaceValidator } from '../../../shared/validators/custom-validators';
 
 /** Custom validator to check if passwords match */
 const passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
@@ -28,7 +29,7 @@ export class RegisterFormContainerComponent {
   private ns = inject(NotificationService);
 
   registerForm = this.fb.group({
-    name: ['', Validators.required],
+    name: ['', [Validators.required, Validators.minLength(2), alphaWithSpacesValidator(), noWhitespaceValidator()]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [
       Validators.required, 
@@ -36,7 +37,7 @@ export class RegisterFormContainerComponent {
       Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
     ]],
     confirmPassword: ['', Validators.required],
-    address: ['', Validators.required],
+    address: ['', [Validators.required, Validators.minLength(10), addressValidator(), noWhitespaceValidator()]],
     phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
     roles: ['CUSTOMER']
   }, { validators: passwordMatchValidator });

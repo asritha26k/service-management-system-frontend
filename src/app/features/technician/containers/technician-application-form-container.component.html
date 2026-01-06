@@ -9,8 +9,17 @@
             <div class="col-md-6 mb-3">
                <label class="form-label fw-bold">Full Name</label>
                <input type="text" class="form-control" formControlName="fullName" placeholder="John Doe">
-               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('fullName')">Required (Letters and
-                  spaces only).</div>
+               @if (isInvalid('fullName')) {
+               <div class="invalid-feedback d-block">
+                  @if (form.get('fullName')?.errors?.['required']) {
+                  Full name is required.
+                  } @else if (form.get('fullName')?.errors?.['alphaWithSpaces']) {
+                  Name must contain only letters and spaces.
+                  } @else if (form.get('fullName')?.errors?.['whitespace']) {
+                  Name cannot be only spaces.
+                  }
+               </div>
+               }
             </div>
             <div class="col-md-6 mb-3">
                <label class="form-label fw-bold">Email</label>
@@ -28,31 +37,49 @@
          <div class="mb-3">
             <label class="form-label fw-bold">Address</label>
             <textarea class="form-control" formControlName="address" rows="2" placeholder="Street Address"></textarea>
-            <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('address')">Required (min 10 chars).</div>
+            @if (isInvalid('address')) {
+            <div class="invalid-feedback d-block">
+               @if (form.get('address')?.errors?.['required']) {
+               Address is required.
+               } @else if (form.get('address')?.errors?.['invalidAddress']) {
+               Address contains invalid characters.
+               } @else if (form.get('address')?.errors?.['whitespace']) {
+               Address cannot be only spaces.
+               }
+            </div>
+            }
          </div>
 
          <div class="row">
             <div class="col-md-4 mb-3">
                <label class="form-label fw-bold">City</label>
                <input type="text" class="form-control" formControlName="city">
-               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('city')">
+               @if (isInvalid('city')) {
+               <div class="invalid-feedback d-block">
                   @if (form.get('city')?.errors?.['required']) {
                   City is required.
-                  } @else if (form.get('city')?.errors?.['minlength']) {
-                  City must be at least 2 characters.
+                  } @else if (form.get('city')?.errors?.['alphabeticOnly']) {
+                  City must contain only letters (no spaces, numbers, or special characters).
+                  } @else if (form.get('city')?.errors?.['whitespace']) {
+                  City cannot be only spaces.
                   }
                </div>
+               }
             </div>
             <div class="col-md-4 mb-3">
                <label class="form-label fw-bold">State</label>
                <input type="text" class="form-control" formControlName="state">
-               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('state')">
+               @if (isInvalid('state')) {
+               <div class="invalid-feedback d-block">
                   @if (form.get('state')?.errors?.['required']) {
                   State is required.
-                  } @else if (form.get('state')?.errors?.['minlength']) {
-                  State must be at least 2 characters.
+                  } @else if (form.get('state')?.errors?.['alphabeticOnly']) {
+                  State must contain only letters (no spaces, numbers, or special characters).
+                  } @else if (form.get('state')?.errors?.['whitespace']) {
+                  State cannot be only spaces.
                   }
                </div>
+               }
             </div>
             <div class="col-md-4 mb-3">
                <label class="form-label fw-bold">Zip Code</label>
@@ -84,7 +111,17 @@
                   <option value="APPLIANCE">Appliance Repair</option>
                   <option value="OTHER">Other</option>
                </select>
-               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('specialization')">Required.</div>
+               @if (isInvalid('specialization')) {
+               <div class="invalid-feedback d-block">
+                  @if (form.get('specialization')?.errors?.['required']) {
+                  Specialization is required.
+                  } @else if (form.get('specialization')?.errors?.['alphanumericWithSpaces']) {
+                  Specialization contains invalid characters.
+                  } @else if (form.get('specialization')?.errors?.['whitespace']) {
+                  Specialization cannot be only spaces.
+                  }
+               </div>
+               }
             </div>
          </div>
 
@@ -98,16 +135,28 @@
          <div class="mb-3">
             <label class="form-label fw-bold">Certifications <span class="text-muted small">(Optional)</span></label>
             <input type="text" class="form-control" formControlName="certifications">
-            @if (form.get('certifications')?.touched && form.get('certifications')?.errors?.['minlength']) {
-            <div class="invalid-feedback d-block">Certifications must be at least 3 characters if provided.</div>
+            @if (form.get('certifications')?.touched && form.get('certifications')?.invalid) {
+            <div class="invalid-feedback d-block">
+               @if (form.get('certifications')?.errors?.['minlength']) {
+               Certifications must be at least 3 characters if provided.
+               } @else if (form.get('certifications')?.errors?.['alphanumericWithSpaces']) {
+               Certifications contain invalid characters.
+               }
+            </div>
             }
          </div>
 
          <div class="mb-3">
             <label class="form-label fw-bold">Previous Employer <span class="text-muted small">(Optional)</span></label>
             <input type="text" class="form-control" formControlName="previousEmployer">
-            @if (form.get('previousEmployer')?.touched && form.get('previousEmployer')?.errors?.['minlength']) {
-            <div class="invalid-feedback d-block">Employer name must be at least 2 characters if provided.</div>
+            @if (form.get('previousEmployer')?.touched && form.get('previousEmployer')?.invalid) {
+            <div class="invalid-feedback d-block">
+               @if (form.get('previousEmployer')?.errors?.['minlength']) {
+               Employer name must be at least 2 characters if provided.
+               } @else if (form.get('previousEmployer')?.errors?.['alphabeticOnly']) {
+               Employer name must contain only letters (no spaces, numbers, or special characters).
+               }
+            </div>
             }
          </div>
 
@@ -115,9 +164,16 @@
             <label class="form-label fw-bold">Work Experience Details <span
                   class="text-muted small">(Optional)</span></label>
             <textarea class="form-control" formControlName="workExperienceDetails" rows="3"></textarea>
-            @if (form.get('workExperienceDetails')?.touched && form.get('workExperienceDetails')?.errors?.['minlength'])
-            {
-            <div class="invalid-feedback d-block">Experience details must be at least 10 characters if provided.</div>
+            @if (form.get('workExperienceDetails')?.touched && form.get('workExperienceDetails')?.invalid) {
+            <div class="invalid-feedback d-block">
+               @if (form.get('workExperienceDetails')?.errors?.['minlength']) {
+               Experience details must be at least 10 characters if provided.
+               } @else if (form.get('workExperienceDetails')?.errors?.['alphanumericWithSpaces']) {
+               Experience details contain invalid characters.
+               } @else if (form.get('workExperienceDetails')?.errors?.['whitespace']) {
+               Experience details cannot be only spaces.
+               }
+            </div>
             }
          </div>
 
@@ -143,8 +199,14 @@
             <label class="form-label fw-bold">Availability (Days/Hours) <span
                   class="text-muted small">(Optional)</span></label>
             <input type="text" class="form-control" formControlName="availability" placeholder="e.g. Mon-Fri 9-5">
-            @if (form.get('availability')?.touched && form.get('availability')?.errors?.['minlength']) {
-            <div class="invalid-feedback d-block">Availability must be at least 3 characters if provided.</div>
+            @if (form.get('availability')?.touched && form.get('availability')?.invalid) {
+            <div class="invalid-feedback d-block">
+               @if (form.get('availability')?.errors?.['minlength']) {
+               Availability must be at least 3 characters if provided.
+               } @else if (form.get('availability')?.errors?.['alphanumericWithSpaces']) {
+               Availability contains invalid characters.
+               }
+            </div>
             }
          </div>
 
@@ -157,7 +219,7 @@
                <div class="invalid-feedback d-block">
                   @if (form.get('emergencyContactName')?.errors?.['minlength']) {
                   Name must be at least 2 characters.
-                  } @else if (form.get('emergencyContactName')?.errors?.['pattern']) {
+                  } @else if (form.get('emergencyContactName')?.errors?.['alphaWithSpaces']) {
                   Name should only contain letters and spaces.
                   }
                </div>
@@ -177,8 +239,16 @@
             <label class="form-label fw-bold">Motivation For Joining <span
                   class="text-muted small">(Optional)</span></label>
             <textarea class="form-control" formControlName="motivation" rows="3"></textarea>
-            @if (form.get('motivation')?.touched && form.get('motivation')?.errors?.['minlength']) {
-            <div class="invalid-feedback d-block">Motivation must be at least 10 characters if provided.</div>
+            @if (form.get('motivation')?.touched && form.get('motivation')?.invalid) {
+            <div class="invalid-feedback d-block">
+               @if (form.get('motivation')?.errors?.['minlength']) {
+               Motivation must be at least 10 characters if provided.
+               } @else if (form.get('motivation')?.errors?.['alphanumericWithSpaces']) {
+               Motivation contains invalid characters.
+               } @else if (form.get('motivation')?.errors?.['whitespace']) {
+               Motivation cannot be only spaces.
+               }
+            </div>
             }
          </div>
 

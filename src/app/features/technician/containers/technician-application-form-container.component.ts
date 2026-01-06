@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators, FormArray } from '@angula
 import { Router } from '@angular/router';
 import { TechnicianService } from '../services/technician.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { alphaWithSpacesValidator, alphabeticOnlyValidator, addressValidator, alphanumericWithSpacesValidator, noWhitespaceValidator } from '../../../shared/validators/custom-validators';
 
 @Component({
   selector: 'app-technician-application-form-container',
@@ -20,26 +21,26 @@ export class TechnicianApplicationFormContainerComponent {
   isSubmitting = false;
 
   form = this.fb.group({
-    fullName: ['', [Validators.required, Validators.pattern('^[a-zA-Z\\s]*$')]],
+    fullName: ['', [Validators.required, Validators.minLength(2), alphaWithSpacesValidator(), noWhitespaceValidator()]],
     email: ['', [Validators.required, Validators.email]],
     phone: ['', [Validators.required, Validators.pattern('^[0-9]{10,12}$')]],
-    address: ['', [Validators.required, Validators.minLength(10)]],
-    city: ['', [Validators.required, Validators.minLength(2)]],
-    state: ['', [Validators.required, Validators.minLength(2)]],
+    address: ['', [Validators.required, Validators.minLength(10), addressValidator(), noWhitespaceValidator()]],
+    city: ['', [Validators.required, Validators.minLength(2), alphabeticOnlyValidator(), noWhitespaceValidator()]],
+    state: ['', [Validators.required, Validators.minLength(2), alphabeticOnlyValidator(), noWhitespaceValidator()]],
     zipCode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
     experience: [1, [Validators.required, Validators.min(1)]],
-    specialization: ['', Validators.required],
+    specialization: ['', [Validators.required, alphanumericWithSpacesValidator(), noWhitespaceValidator()]],
     skills: this.fb.array<string>([]), 
-    certifications: ['', Validators.minLength(3)],
-    previousEmployer: ['', Validators.minLength(2)],
-    workExperienceDetails: ['', Validators.minLength(10)],
+    certifications: ['', [Validators.minLength(3), alphanumericWithSpacesValidator()]],
+    previousEmployer: ['', [Validators.minLength(2), alphabeticOnlyValidator()]],
+    workExperienceDetails: ['', [Validators.minLength(10), alphanumericWithSpacesValidator(), noWhitespaceValidator()]],
     maxWorkload: [5, [Validators.required, Validators.min(1), Validators.max(20)]],
     hasVehicle: [false],
     hasToolkit: [false],
-    availability: ['', Validators.minLength(3)],
-    emergencyContactName: ['', [Validators.minLength(2), Validators.pattern('^[a-zA-Z\\s]*$')]],
+    availability: ['', [Validators.minLength(3), alphanumericWithSpacesValidator()]],
+    emergencyContactName: ['', [Validators.minLength(2), alphaWithSpacesValidator()]],
     emergencyContactPhone: ['', Validators.pattern('^[0-9]{10,12}$')],
-    motivation: ['', Validators.minLength(10)]
+    motivation: ['', [Validators.minLength(10), alphanumericWithSpacesValidator(), noWhitespaceValidator()]]
   });
 
   get skillsFormArray() {

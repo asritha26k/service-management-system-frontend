@@ -75,6 +75,10 @@
             Street address is required.
             } @else if (requestForm.get('street')?.errors?.['minlength']) {
             Street must be at least 5 characters.
+            } @else if (requestForm.get('street')?.errors?.['invalidAddress']) {
+            Street contains invalid characters.
+            } @else if (requestForm.get('street')?.errors?.['whitespace']) {
+            Street cannot be only spaces.
             }
           </div>
           }
@@ -86,8 +90,10 @@
           <div class="invalid-feedback">
             @if (requestForm.get('city')?.errors?.['required']) {
             City is required.
-            } @else if (requestForm.get('city')?.errors?.['minlength']) {
-            City must be at least 2 characters.
+            } @else if (requestForm.get('city')?.errors?.['alphabeticOnly']) {
+            City must contain only letters (no spaces, numbers, or special characters).
+            } @else if (requestForm.get('city')?.errors?.['whitespace']) {
+            City cannot be only spaces.
             }
           </div>
           }
@@ -99,8 +105,10 @@
           <div class="invalid-feedback">
             @if (requestForm.get('state')?.errors?.['required']) {
             State is required.
-            } @else if (requestForm.get('state')?.errors?.['minlength']) {
-            State must be at least 2 characters.
+            } @else if (requestForm.get('state')?.errors?.['alphabeticOnly']) {
+            State must contain only letters (no spaces, numbers, or special characters).
+            } @else if (requestForm.get('state')?.errors?.['whitespace']) {
+            State cannot be only spaces.
             }
           </div>
           }
