@@ -5,13 +5,29 @@ import { Observable } from 'rxjs';
 export interface TechnicianSummary {
   id: string;
   userId: string;
-  name: string; // Enriched?
+  name: string;
   specialization: string;
+  skills: string[];
+  location: string;
   available: boolean;
-
   currentWorkload: number;
   maxWorkload: number;
-  location?: string;
+}
+
+export interface TechnicianProfile {
+  id: string;
+  userId: string;
+  email: string;
+  name: string;
+  phone: string;
+  specialization: string;
+  experience: number;
+  skills: string[];
+  location: string;
+  available: boolean;
+  currentWorkload: number;
+  maxWorkload: number;
+  createdAt: string;
 }
 
 import { TechnicianApplicationRequest } from '../models/technician-application.models';
@@ -53,6 +69,24 @@ export class TechnicianService {
 
   getAvailableTechnicians(): Observable<TechnicianSummary[]> {
     return this.http.get<TechnicianSummary[]>(`${this.apiUrl}/available`);
+  }
+
+  getSuggestedTechnicians(location?: string, skills?: string[]): Observable<TechnicianProfile[]> {
+    let url = `${this.apiUrl}/suggestions`;
+    const params: string[] = [];
+    
+    if (location) {
+      params.push(`location=${encodeURIComponent(location)}`);
+    }
+    if (skills && skills.length > 0) {
+      params.push(`skills=${encodeURIComponent(skills.join(','))}`);
+    }
+    
+    if (params.length > 0) {
+      url += '?' + params.join('&');
+    }
+    
+    return this.http.get<TechnicianProfile[]>(url);
   }
 
   // Add more methods as needed (get stats, etc)

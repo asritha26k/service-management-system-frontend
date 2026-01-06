@@ -63,9 +63,27 @@
           <!-- Technician Selection -->
           <div class="col-md-7">
             <div class="card shadow-sm border-0 h-100">
-               <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
-                 <span>Select Technician</span>
-                 <span class="badge bg-primary">{{ filteredTechnicians.length }} Available</span>
+               <div class="card-header bg-white fw-bold">
+                 <ul class="nav nav-tabs border-0 mb-0" role="tablist">
+                   <li class="nav-item" role="presentation">
+                     <button class="nav-link" 
+                             [class.active]="activeTab === 'suggestions'"
+                             (click)="switchTab('suggestions')"
+                             type="button" role="tab">
+                       <i class="bi bi-lightbulb me-2"></i>Suggested Technicians
+                       <span class="badge bg-info ms-2">{{ filteredSuggestions.length }}</span>
+                     </button>
+                   </li>
+                   <li class="nav-item" role="presentation">
+                     <button class="nav-link" 
+                             [class.active]="activeTab === 'available'"
+                             (click)="switchTab('available')"
+                             type="button" role="tab">
+                       <i class="bi bi-person-check me-2"></i>All Available
+                       <span class="badge bg-primary ms-2">{{ filteredTechnicians.length }}</span>
+                     </button>
+                   </li>
+                 </ul>
                </div>
                <div class="card-body">
                  <div class="input-group mb-3">
@@ -74,30 +92,91 @@
                           [(ngModel)]="searchTerm" (ngModelChange)="filterTechnicians()">
                  </div>
 
-                 <div class="list-group list-group-flush border rounded overflow-auto" style="max-height: 500px;">
-                    @for (tech of filteredTechnicians; track tech.id) {
-                      <button class="list-group-item list-group-item-action p-3"
-                              [class.active]="selectedTechnicianId === tech.id"
-                              (click)="selectTechnician(tech.id)">
-                         <div class="d-flex w-100 justify-content-between align-items-center mb-1">
-                           <h6 class="mb-0 fw-bold">{{ tech.name }}</h6>
-                           <span class="badge" [ngClass]="getWorkloadBadgeClass(tech.currentWorkload, tech.maxWorkload)">
-                             Load: {{ tech.currentWorkload }}/{{ tech.maxWorkload }}
-                           </span>
-                         </div>
-                         <p class="mb-1 small">{{ tech.specialization }}</p>
-                         <small [class.text-white-50]="selectedTechnicianId === tech.id" [class.text-muted]="selectedTechnicianId !== tech.id">
-                           <i class="bi bi-geo-alt me-1"></i> {{ tech.location || 'Location not available' }}
-                         </small>
-                      </button>
-                    }
-                    @if (filteredTechnicians.length === 0) {
-                      <div class="text-center p-5 text-muted">
-                        <i class="bi bi-person-x display-4 mb-3 d-block"></i>
-                        No technicians found.
-                      </div>
-                    }
-                 </div>
+                 <!-- Suggestions Tab -->
+                 @if (activeTab === 'suggestions') {
+                   @if (isLoadingSuggestions) {
+                     <div class="text-center py-5">
+                       <div class="spinner-border text-primary" role="status">
+                         <span class="visually-hidden">Loading...</span>
+                       </div>
+                     </div>
+                   } @else {
+                     <div class="list-group list-group-flush border rounded overflow-auto" style="max-height: 500px;">
+                        @for (tech of filteredSuggestions; track tech.id) {
+                          <button class="list-group-item list-group-item-action p-3"
+                                  [class.active]="selectedTechnicianId === tech.id"
+                                  (click)="selectTechnician(tech.id)">
+                             <div class="d-flex w-100 justify-content-between align-items-start mb-2">
+                               <div>
+                                 <h6 class="mb-0 fw-bold">{{ tech.name }}</h6>
+                                 <small class="text-muted">{{ tech.specialization }}</small>
+                               </div>
+                               <span class="badge" [ngClass]="getWorkloadBadgeClass(tech.currentWorkload, tech.maxWorkload)">
+                                 Load: {{ tech.currentWorkload }}/{{ tech.maxWorkload }}
+                               </span>
+                             </div>
+                             <p class="mb-1 small text-info">
+                               <i class="bi bi-tools me-1"></i>
+                               @if (tech.skills && tech.skills.length > 0) {
+                                 {{ tech.skills.join(', ') }}
+                               } @else {
+                                 <span class="text-muted">No skills specified</span>
+                               }
+                             </p>
+                             <small [class.text-white-50]="selectedTechnicianId === tech.id" [class.text-muted]="selectedTechnicianId !== tech.id">
+                               <i class="bi bi-geo-alt me-1"></i> {{ tech.location || 'Location not available' }}
+                             </small>
+                             <br>
+                             <small [class.text-white-50]="selectedTechnicianId === tech.id" [class.text-muted]="selectedTechnicianId !== tech.id">
+                               <i class="bi bi-briefcase me-1"></i> {{ tech.experience }} years experience
+                             </small>
+                          </button>
+                        }
+                        @if (filteredSuggestions.length === 0) {
+                          <div class="text-center p-5 text-muted">
+                            <i class="bi bi-inbox display-4 mb-3 d-block"></i>
+                            No suggested technicians found.
+                          </div>
+                        }
+                     </div>
+                   }
+                 }
+
+                 <!-- Available Technicians Tab -->
+                 @if (activeTab === 'available') {
+                   <div class="list-group list-group-flush border rounded overflow-auto" style="max-height: 500px;">
+                      @for (tech of filteredTechnicians; track tech.id) {
+                        <button class="list-group-item list-group-item-action p-3"
+                                [class.active]="selectedTechnicianId === tech.id"
+                                (click)="selectTechnician(tech.id)">
+                           <div class="d-flex w-100 justify-content-between align-items-center mb-1">
+                             <h6 class="mb-0 fw-bold">{{ tech.name }}</h6>
+                             <span class="badge" [ngClass]="getWorkloadBadgeClass(tech.currentWorkload, tech.maxWorkload)">
+                               Load: {{ tech.currentWorkload }}/{{ tech.maxWorkload }}
+                             </span>
+                           </div>
+                           <p class="mb-1 small">{{ tech.specialization }}</p>
+                           <p class="mb-1 small text-info">
+                             <i class="bi bi-tools me-1"></i>
+                             @if (tech.skills && tech.skills.length > 0) {
+                               {{ tech.skills.join(', ') }}
+                             } @else {
+                               <span class="text-muted">No skills specified</span>
+                             }
+                           </p>
+                           <small [class.text-white-50]="selectedTechnicianId === tech.id" [class.text-muted]="selectedTechnicianId !== tech.id">
+                             <i class="bi bi-geo-alt me-1"></i> {{ tech.location || 'Location not available' }}
+                           </small>
+                        </button>
+                      }
+                      @if (filteredTechnicians.length === 0) {
+                        <div class="text-center p-5 text-muted">
+                          <i class="bi bi-person-x display-4 mb-3 d-block"></i>
+                          No technicians found.
+                        </div>
+                      }
+                   </div>
+                 }
                </div>
                <div class="card-footer bg-white border-top-0 p-3 text-end">
                   <button class="btn btn-primary px-4" [disabled]="!selectedTechnicianId || isAssigning" (click)="confirmAssignment()">
