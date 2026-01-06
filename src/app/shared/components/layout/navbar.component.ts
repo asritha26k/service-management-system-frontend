@@ -18,6 +18,7 @@ export class NavbarComponent implements OnInit {
   router = inject(Router);
 
   notifications: AppNotification[] = [];
+  showLogoutModal = false;
 
   ngOnInit() {
     if (this.authState.isAuthenticated()) {
@@ -55,9 +56,18 @@ export class NavbarComponent implements OnInit {
     return `/${role.toLowerCase()}/dashboard`;
   }
 
-  logout() {
+  confirmLogout() {
+    this.showLogoutModal = true;
+  }
+
+  proceedLogout() {
+    this.showLogoutModal = false;
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  cancelLogout() {
+    this.showLogoutModal = false;
   }
 }
 
