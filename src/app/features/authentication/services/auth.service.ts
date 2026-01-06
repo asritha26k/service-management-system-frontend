@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { AuthStateService } from '../../../core/services/auth-state.service';
-import { LoginResponse, TokenResponse, User } from '../types/auth.models';
+import { LoginResponse, TokenResponse, User, LoginRequest, ChangePasswordRequest, RegisterCustomerRequest, RegisterManagerRequest, MessageResponse, IdMessageResponse } from '../types/auth.models';
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +16,13 @@ export class AuthService {
   // Gateway URL for Identity Service
   private apiUrl = 'http://localhost:8080/identity-service/api/auth'; 
 
-  login(credentials: any): Observable<LoginResponse> {
+  login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials)
       .pipe(
         tap(response => {
           const user: User = {
             userId: response.userId,
-            email: (response as any).username || (response as any).email || response.email,
+            email: response.email,
             role: response.role
           };
           this.authState.setSession(response.accessToken, user, response.forcePasswordChange);
@@ -30,16 +30,16 @@ export class AuthService {
       );
   }
 
-  changePassword(data: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/change-password`, data);
+  changePassword(data: ChangePasswordRequest): Observable<MessageResponse> {
+    return this.http.put<MessageResponse>(`${this.apiUrl}/change-password`, data);
   }
 
-  registerCustomer(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, data);
+  registerCustomer(data: RegisterCustomerRequest): Observable<IdMessageResponse> {
+    return this.http.post<IdMessageResponse>(`${this.apiUrl}/register`, data);
   }
 
-  registerManager(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/admin/register-manager`, data);
+  registerManager(data: RegisterManagerRequest): Observable<IdMessageResponse> {
+    return this.http.post<IdMessageResponse>(`${this.apiUrl}/admin/register-manager`, data);
   }
 
   logout() {

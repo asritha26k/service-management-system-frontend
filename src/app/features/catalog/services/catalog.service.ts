@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ServiceCategory, ServiceItem, CreateCategoryRequest, CreateServiceItemRequest } from '../models/catalog.models';
+import { IdMessageResponse } from '../../authentication/types/auth.models';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +21,8 @@ export class CatalogService {
     return this.http.get<ServiceCategory>(`${this.apiUrl}/categories/${id}`);
   }
 
-  createCategory(data: CreateCategoryRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/categories`, data);
+  createCategory(data: CreateCategoryRequest): Observable<IdMessageResponse> {
+    return this.http.post<IdMessageResponse>(`${this.apiUrl}/categories`, data);
   }
 
   // Services
@@ -37,8 +38,8 @@ export class CatalogService {
     return this.http.get<ServiceItem>(`${this.apiUrl}/services/${id}`);
   }
 
-  createService(data: CreateServiceItemRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/services`, data);
+  createService(data: CreateServiceItemRequest): Observable<IdMessageResponse> {
+    return this.http.post<IdMessageResponse>(`${this.apiUrl}/services`, data);
   }
 
   deleteService(id: string): Observable<void> {

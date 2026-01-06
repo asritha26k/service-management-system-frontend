@@ -16,6 +16,15 @@ export interface TechnicianSummary {
 
 import { TechnicianApplicationRequest } from '../models/technician-application.models';
 import { ApplicationRejectionRequest, ApplicationReviewResponse } from '../../manager/models/technician-approval.models';
+import { IdMessageResponse } from '../../authentication/types/auth.models';
+
+export interface ApplicationSubmissionResponse {
+  id: string;
+  fullName: string;
+  email: string;
+  status: string;
+  message?: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -25,21 +34,21 @@ export class TechnicianService {
   // Gateway URL for Technician Service
   private apiUrl = 'http://localhost:8080/technician-service/api/technicians';
 
-  apply(data: TechnicianApplicationRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/apply`, data);
+  apply(data: TechnicianApplicationRequest): Observable<ApplicationSubmissionResponse> {
+    return this.http.post<ApplicationSubmissionResponse>(`${this.apiUrl}/apply`, data);
   }
 
   getPendingApplications(): Observable<ApplicationReviewResponse[]> {
     return this.http.get<ApplicationReviewResponse[]>(`${this.apiUrl}/applications/pending`);
   }
 
-  approveApplication(id: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/applications/${id}/approve`, {});
+  approveApplication(id: string): Observable<IdMessageResponse> {
+    return this.http.post<IdMessageResponse>(`${this.apiUrl}/applications/${id}/approve`, {});
   }
 
-  rejectApplication(id: string, reason: string): Observable<any> {
+  rejectApplication(id: string, reason: string): Observable<IdMessageResponse> {
     const body: ApplicationRejectionRequest = { reason };
-    return this.http.post(`${this.apiUrl}/applications/${id}/reject`, body);
+    return this.http.post<IdMessageResponse>(`${this.apiUrl}/applications/${id}/reject`, body);
   }
 
   getAvailableTechnicians(): Observable<TechnicianSummary[]> {

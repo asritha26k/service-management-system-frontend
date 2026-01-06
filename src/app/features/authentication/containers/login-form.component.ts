@@ -28,7 +28,7 @@ export class LoginFormContainerComponent {
       this.isLoading = true;
       this.errorMessage = '';
       
-      this.authService.login(this.loginForm.value).subscribe({
+      this.authService.login(this.loginForm.value as any).subscribe({
         next: (res) => {
           this.isLoading = false;
           if (res.forcePasswordChange) {

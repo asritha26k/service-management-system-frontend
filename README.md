@@ -451,7 +451,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Authors
 
-- **Your Name** - Initial work - [asritha26k](https://github.com/asritha26k)
+- **Asritha Kuruguntla** - Initial work - [asritha26k](https://github.com/asritha26k)
 
 ---
 
@@ -465,7 +465,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-For support, email your-email@example.com or open an issue in the GitHub repository.
+For support, email asritha.kuruguntla@gmail.com or open an issue in the GitHub repository.
 
 ---
 

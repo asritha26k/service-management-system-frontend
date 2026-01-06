@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CreateServiceRequestRequest, ServiceRequestResponse } from '../models/service-request.models';
 import { PagedResponse } from '../../../shared/models/paged-response.model';
+import { IdMessageResponse } from '../../authentication/types/auth.models';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,8 @@ export class ServiceRequestService {
   // Gateway URL for Service Operations Service
   private apiUrl = 'http://localhost:8080/service-operations-service/api/service-requests';
 
-  createRequest(data: CreateServiceRequestRequest): Observable<any> {
-    return this.http.post(this.apiUrl, data);
+  createRequest(data: CreateServiceRequestRequest): Observable<IdMessageResponse> {
+    return this.http.post<IdMessageResponse>(this.apiUrl, data);
   }
 
   getMyRequests(): Observable<ServiceRequestResponse[]> {

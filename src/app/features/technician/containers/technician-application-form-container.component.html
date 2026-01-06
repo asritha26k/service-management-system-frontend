@@ -1,141 +1,144 @@
 <div class="row justify-content-center">
-      <div class="col-lg-12">
-        <p class="text-muted mb-4">Join our team of expert technicians. Please fill out the form below.</p>
-        
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
-          
-          <h5 class="mb-3 border-bottom pb-2 fw-bold text-primary">Personal Information</h5>
-          <div class="row">
+   <div class="col-lg-12">
+      <p class="text-muted mb-4">Join our team of expert technicians. Please fill out the form below.</p>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+         <h5 class="mb-3 border-bottom pb-2 fw-bold text-primary">Personal Information</h5>
+         <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label fw-bold">Full Name</label>
-              <input type="text" class="form-control" formControlName="fullName" placeholder="John Doe">
-              <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('fullName')">Required (Letters and spaces only).</div>
+               <label class="form-label fw-bold">Full Name</label>
+               <input type="text" class="form-control" formControlName="fullName" placeholder="John Doe">
+               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('fullName')">Required (Letters and
+                  spaces only).</div>
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label fw-bold">Email</label>
-              <input type="email" class="form-control" formControlName="email" placeholder="john@example.com">
-              <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('email')">Please provide a valid email.</div>
+               <label class="form-label fw-bold">Email</label>
+               <input type="email" class="form-control" formControlName="email" placeholder="john@example.com">
+               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('email')">Please provide a valid email.
+               </div>
             </div>
             <div class="col-md-6 mb-3">
                <label class="form-label fw-bold">Phone</label>
                <input type="text" class="form-control" formControlName="phone" placeholder="+1 234 567 8900">
                <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('phone')">Required (10-12 digits).</div>
             </div>
-          </div>
+         </div>
 
-          <div class="mb-3">
-             <label class="form-label fw-bold">Address</label>
-             <textarea class="form-control" formControlName="address" rows="2" placeholder="Street Address"></textarea>
-             <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('address')">Required (min 10 chars).</div>
-          </div>
+         <div class="mb-3">
+            <label class="form-label fw-bold">Address</label>
+            <textarea class="form-control" formControlName="address" rows="2" placeholder="Street Address"></textarea>
+            <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('address')">Required (min 10 chars).</div>
+         </div>
 
-          <div class="row">
+         <div class="row">
             <div class="col-md-4 mb-3">
-              <label class="form-label fw-bold">City</label>
-              <input type="text" class="form-control" formControlName="city">
-              <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('city')">Required.</div>
+               <label class="form-label fw-bold">City</label>
+               <input type="text" class="form-control" formControlName="city">
+               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('city')">Required.</div>
             </div>
             <div class="col-md-4 mb-3">
-              <label class="form-label fw-bold">State</label>
-              <input type="text" class="form-control" formControlName="state">
-              <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('state')">Required.</div>
+               <label class="form-label fw-bold">State</label>
+               <input type="text" class="form-control" formControlName="state">
+               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('state')">Required.</div>
             </div>
             <div class="col-md-4 mb-3">
-              <label class="form-label fw-bold">Zip Code</label>
-              <input type="text" class="form-control" formControlName="zipCode">
-              <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('zipCode')">Required (6 digits).</div>
+               <label class="form-label fw-bold">Zip Code</label>
+               <input type="text" class="form-control" formControlName="zipCode">
+               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('zipCode')">Required (6 digits).</div>
             </div>
-          </div>
+         </div>
 
-          <h5 class="mt-4 mb-3 border-bottom pb-2 fw-bold text-primary">Professional Details</h5>
-          <div class="row">
-             <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Experience (Years)</label>
-                <input type="number" class="form-control" formControlName="experience">
-                <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('experience')">Required.</div>
-             </div>
-             <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Specialization</label>
-                <select class="form-select" formControlName="specialization">
-                   <option value="">Select...</option>
-                   <option value="PLUMBING">Plumbing</option>
-                   <option value="ELECTRICAL">Electrical</option>
-                   <option value="HVAC">HVAC</option>
-                   <option value="APPLIANCE">Appliance Repair</option>
-                   <option value="OTHER">Other</option>
-                </select>
-                <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('specialization')">Required.</div>
-             </div>
-          </div>
-          
-          <div class="mb-3">
-             <label class="form-label fw-bold">Skills (Comma separated)</label>
-             <input type="text" class="form-control" placeholder="e.g. Wiring, Pipe Fitting, Installation" #skillsInput (blur)="updateSkills(skillsInput.value)">
-             <small class="text-muted">Current skills: {{ skillsFormArray.value.join(', ') || 'None added' }}</small>
-          </div>
+         <h5 class="mt-4 mb-3 border-bottom pb-2 fw-bold text-primary">Professional Details</h5>
+         <div class="row">
+            <div class="col-md-6 mb-3">
+               <label class="form-label fw-bold">Experience (Years)</label>
+               <input type="number" class="form-control" formControlName="experience">
+               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('experience')">Required.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+               <label class="form-label fw-bold">Specialization</label>
+               <select class="form-select" formControlName="specialization">
+                  <option value="">Select...</option>
+                  <option value="PLUMBING">Plumbing</option>
+                  <option value="ELECTRICAL">Electrical</option>
+                  <option value="HVAC">HVAC</option>
+                  <option value="APPLIANCE">Appliance Repair</option>
+                  <option value="OTHER">Other</option>
+               </select>
+               <div class="invalid-feedback d-block" [class.d-none]="!isInvalid('specialization')">Required.</div>
+            </div>
+         </div>
 
-          <div class="mb-3">
-             <label class="form-label fw-bold">Certifications</label>
-             <input type="text" class="form-control" formControlName="certifications">
-          </div>
-          
-          <div class="mb-3">
-             <label class="form-label fw-bold">Previous Employer</label>
-             <input type="text" class="form-control" formControlName="previousEmployer">
-          </div>
+         <div class="mb-3">
+            <label class="form-label fw-bold">Skills (Comma separated)</label>
+            <input type="text" class="form-control" placeholder="e.g. Wiring, Pipe Fitting, Installation" #skillsInput
+               (blur)="updateSkills(skillsInput.value)">
+            <small class="text-muted">Current skills: {{ skillsFormArray.value.join(', ') || 'None added' }}</small>
+         </div>
 
-          <div class="mb-3">
-             <label class="form-label fw-bold">Work Experience Details</label>
-             <textarea class="form-control" formControlName="workExperienceDetails" rows="3"></textarea>
-          </div>
+         <div class="mb-3">
+            <label class="form-label fw-bold">Certifications</label>
+            <input type="text" class="form-control" formControlName="certifications">
+         </div>
 
-          <h5 class="mt-4 mb-3 border-bottom pb-2 fw-bold text-primary">Availability & Preferences</h5>
-          <div class="row">
-             <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Max Concurrent Jobs</label>
-                <input type="number" class="form-control" formControlName="maxWorkload">
-             </div>
-             <div class="col-md-6 mb-3 d-flex align-items-center gap-4 pt-4">
-                <div class="form-check">
+         <div class="mb-3">
+            <label class="form-label fw-bold">Previous Employer</label>
+            <input type="text" class="form-control" formControlName="previousEmployer">
+         </div>
+
+         <div class="mb-3">
+            <label class="form-label fw-bold">Work Experience Details</label>
+            <textarea class="form-control" formControlName="workExperienceDetails" rows="3"></textarea>
+         </div>
+
+         <h5 class="mt-4 mb-3 border-bottom pb-2 fw-bold text-primary">Availability & Preferences</h5>
+         <div class="row">
+            <div class="col-md-6 mb-3">
+               <label class="form-label fw-bold">Max Concurrent Jobs</label>
+               <input type="number" class="form-control" formControlName="maxWorkload">
+            </div>
+            <div class="col-md-6 mb-3 d-flex align-items-center gap-4 pt-4">
+               <div class="form-check">
                   <input class="form-check-input" type="checkbox" formControlName="hasVehicle">
                   <label class="form-check-label">Has Vehicle</label>
-                </div>
-                <div class="form-check">
+               </div>
+               <div class="form-check">
                   <input class="form-check-input" type="checkbox" formControlName="hasToolkit">
                   <label class="form-check-label">Has Toolkit</label>
-                </div>
-             </div>
-          </div>
-          
-          <div class="mb-3">
-             <label class="form-label fw-bold">Availability (Days/Hours)</label>
-             <input type="text" class="form-control" formControlName="availability" placeholder="e.g. Mon-Fri 9-5">
-          </div>
+               </div>
+            </div>
+         </div>
 
-          <h5 class="mt-4 mb-3 border-bottom pb-2 fw-bold text-primary">Emergency Contact</h5>
-          <div class="row">
-             <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Contact Name</label>
-                <input type="text" class="form-control" formControlName="emergencyContactName">
-             </div>
-             <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Contact Phone</label>
-                <input type="text" class="form-control" formControlName="emergencyContactPhone">
-             </div>
-          </div>
-          
-           <div class="mb-4">
-             <label class="form-label fw-bold">Motivation For Joining</label>
-             <textarea class="form-control" formControlName="motivation" rows="3"></textarea>
-          </div>
+         <div class="mb-3">
+            <label class="form-label fw-bold">Availability (Days/Hours)</label>
+            <input type="text" class="form-control" formControlName="availability" placeholder="e.g. Mon-Fri 9-5">
+         </div>
 
-          <div class="d-grid gap-2">
+         <h5 class="mt-4 mb-3 border-bottom pb-2 fw-bold text-primary">Emergency Contact</h5>
+         <div class="row">
+            <div class="col-md-6 mb-3">
+               <label class="form-label fw-bold">Contact Name</label>
+               <input type="text" class="form-control" formControlName="emergencyContactName">
+            </div>
+            <div class="col-md-6 mb-3">
+               <label class="form-label fw-bold">Contact Phone</label>
+               <input type="text" class="form-control" formControlName="emergencyContactPhone">
+            </div>
+         </div>
+
+         <div class="mb-4">
+            <label class="form-label fw-bold">Motivation For Joining</label>
+            <textarea class="form-control" formControlName="motivation" rows="3"></textarea>
+         </div>
+
+         <div class="d-flex flex-column gap-2">
             <button type="submit" class="btn btn-primary btn-lg" [disabled]="form.invalid || isSubmitting">
-              {{ isSubmitting ? 'Submitting...' : 'Submit Application' }}
+               {{ isSubmitting ? 'Submitting...' : 'Submit Application' }}
             </button>
             <button type="button" class="btn btn-outline-secondary" (click)="goHome()">Cancel</button>
-          </div>
+         </div>
 
-        </form>
-      </div>
-    </div>
+      </form>
+   </div>
+</div>

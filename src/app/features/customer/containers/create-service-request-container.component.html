@@ -1,120 +1,126 @@
 <div class="card p-4 mt-3 border">
-      <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
-        
-        @if (!preSelectedService) {
-        <div class="mb-3">
-          <label class="form-label fw-bold">Service Category</label>
-          <select class="form-select" (change)="onCategoryChange($event)">
-            <option value="">Select Category</option>
-            @for (cat of categories; track cat.id) {
-            <option [value]="cat.id">{{ cat.name }}</option>
-            }
-          </select>
-        </div>
+  <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
 
-        <div class="mb-3">
-          <label class="form-label fw-bold">Service Issue Type</label>
-          <select class="form-select" formControlName="serviceId" [ngClass]="{'is-invalid': requestForm.get('serviceId')?.touched && requestForm.get('serviceId')?.invalid}">
-            <option value="">Select Service</option>
-            @for (service of filteredServices; track service.id) {
-            <option [value]="service.id">{{ service.name }} - ₹{{ service.basePrice }}</option>
-            }
-          </select>
-           @if (requestForm.get('serviceId')?.touched && requestForm.get('serviceId')?.invalid) {
-           <div class="invalid-feedback d-block">
-            Service type is required.
-          </div>
-          }
-        </div>
-        } @else {
-        <div class="card mb-4 border overflow-hidden bg-light">
-          <div class="row g-0">
-             @if (preSelectedService.images && preSelectedService.images.length > 0) {
-             <div class="col-md-3">
-                <img [src]="preSelectedService.images[0].url" class="img-fluid h-100" [alt]="preSelectedService.images[0].alt" style="object-fit: cover; min-height: 150px; width: 100%;" (error)="preSelectedService.images = undefined">
-             </div>
-             }
-             <div class="col-md-{{ (preSelectedService.images && preSelectedService.images.length > 0) ? '9' : '12' }}">
-                <div class="card-body">
-                   <div class="d-flex justify-content-between align-items-start">
-                      <div>
-                        <h5 class="card-title fw-bold text-primary mb-1"><i class="bi bi-check-circle-fill me-2 text-muted"></i>{{ preSelectedService.name }}</h5>
-                        <p class="card-text text-muted small mb-2">{{ preSelectedService.description }}</p>
-                      </div>
-                      <a routerLink="/customer/catalog" class="btn btn-outline-primary btn-sm ms-2">Change</a>
-                   </div>
-                   
-                   <div class="d-flex align-items-center gap-3 mt-2">
-                      <span class="badge bg-white text-primary border fs-6 px-3 py-2">₹{{ preSelectedService.basePrice }}</span>
-                      <span class="text-muted small"><i class="bi bi-hourglass-split me-1"></i> SLA: {{ preSelectedService.slaHours }}h</span>
-                      @if (preSelectedService.estimatedDurationMinutes) {
-                        <span class="text-muted small"><i class="bi bi-clock me-1"></i> ~{{ preSelectedService.estimatedDurationMinutes }} mins</span>
-                      }
-                   </div>
-                </div>
-             </div>
-          </div>
+    @if (!preSelectedService) {
+    <div class="mb-3">
+      <label class="form-label fw-bold">Service Category</label>
+      <select class="form-select" (change)="onCategoryChange($event)">
+        <option value="">Select Category</option>
+        @for (cat of categories; track cat.id) {
+        <option [value]="cat.id">{{ cat.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Service Issue Type</label>
+      <select class="form-select" formControlName="serviceId"
+        [ngClass]="{'is-invalid': requestForm.get('serviceId')?.touched && requestForm.get('serviceId')?.invalid}">
+        <option value="">Select Service</option>
+        @for (service of filteredServices; track service.id) {
+        <option [value]="service.id">{{ service.name }} - ₹{{ service.basePrice }}</option>
+        }
+      </select>
+      @if (requestForm.get('serviceId')?.touched && requestForm.get('serviceId')?.invalid) {
+      <div class="invalid-feedback d-block">
+        Service type is required.
+      </div>
+      }
+    </div>
+    } @else {
+    <div class="card mb-4 border overflow-hidden bg-light">
+      <div class="row g-0">
+        @if (preSelectedService.images && preSelectedService.images.length > 0) {
+        <div class="col-md-3">
+          <img [src]="preSelectedService.images[0].url" class="img-fluid h-100" [alt]="preSelectedService.images[0].alt"
+            style="object-fit: cover; min-height: 150px; width: 100%;" (error)="preSelectedService.images = undefined">
         </div>
         }
+        <div class="col-md-{{ (preSelectedService.images && preSelectedService.images.length > 0) ? '9' : '12' }}">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h5 class="card-title fw-bold text-primary mb-1"><i
+                    class="bi bi-check-circle-fill me-2 text-muted"></i>{{ preSelectedService.name }}</h5>
+                <p class="card-text text-muted small mb-2">{{ preSelectedService.description }}</p>
+              </div>
+              <a routerLink="/customer/catalog" class="btn btn-outline-primary btn-sm ms-2">Change</a>
+            </div>
 
-        <div class="mb-3">
-          <label class="form-label fw-bold">Service Address</label>
-          <div class="row g-3">
-             <div class="col-12">
-               <input type="text" class="form-control" formControlName="street" placeholder="House No / Street Name" 
-                      [ngClass]="{'is-invalid': requestForm.get('street')?.touched && requestForm.get('street')?.invalid}">
-               @if (requestForm.get('street')?.touched && requestForm.get('street')?.invalid) {
-                <div class="invalid-feedback">Street address is required.</div>
-               }
-             </div>
-             <div class="col-md-5">
-               <input type="text" class="form-control" formControlName="city" placeholder="City"
-                      [ngClass]="{'is-invalid': requestForm.get('city')?.touched && requestForm.get('city')?.invalid}">
-               @if (requestForm.get('city')?.touched && requestForm.get('city')?.invalid) {
-                <div class="invalid-feedback">City is required.</div>
-               }
-             </div>
-             <div class="col-md-4">
-               <input type="text" class="form-control" formControlName="state" placeholder="State"
-                      [ngClass]="{'is-invalid': requestForm.get('state')?.touched && requestForm.get('state')?.invalid}">
-               @if (requestForm.get('state')?.touched && requestForm.get('state')?.invalid) {
-                <div class="invalid-feedback">State is required.</div>
-               }
-             </div>
-             <div class="col-md-3">
-               <input type="text" class="form-control" formControlName="zipCode" placeholder="Zip Code"
-                      [ngClass]="{'is-invalid': requestForm.get('zipCode')?.touched && requestForm.get('zipCode')?.invalid}">
-               @if (requestForm.get('zipCode')?.touched && requestForm.get('zipCode')?.invalid) {
-                <div class="invalid-feedback">Zip Code is required.</div>
-               }
-             </div>
+            <div class="d-flex align-items-center gap-3 mt-2">
+              <span class="badge bg-white text-primary border fs-6 px-3 py-2">₹{{ preSelectedService.basePrice }}</span>
+              <span class="text-muted small"><i class="bi bi-hourglass-split me-1"></i> SLA: {{
+                preSelectedService.slaHours }}h</span>
+              @if (preSelectedService.estimatedDurationMinutes) {
+              <span class="text-muted small"><i class="bi bi-clock me-1"></i> ~{{
+                preSelectedService.estimatedDurationMinutes }} mins</span>
+              }
+            </div>
           </div>
         </div>
-
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Priority</label>
-            <select class="form-select" formControlName="priority">
-              <option value="LOW">Low</option>
-              <option value="MEDIUM">Medium</option>
-              <option value="HIGH">High</option>
-            </select>
-          </div>
-          <div class="col-md-6 mb-3">
-             <label class="form-label fw-bold">Preferred Schedule</label>
-             <input type="datetime-local" class="form-control" formControlName="preferredDate" [min]="minDate" [ngClass]="{'is-invalid': requestForm.get('preferredDate')?.touched && requestForm.get('preferredDate')?.invalid}">
-             @if (requestForm.get('preferredDate')?.touched && requestForm.get('preferredDate')?.invalid) {
-             <div class="invalid-feedback d-block">
-               Please select a valid future date and time.
-             </div>
-             }
-          </div>
-        </div>
-
-        <div class="d-grid gap-2 mt-3">
-           <button type="submit" class="btn btn-primary btn-lg" [disabled]="requestForm.invalid || isLoading">
-            {{ isLoading ? 'Submitting...' : 'Submit Request' }}
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
+    }
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Service Address</label>
+      <div class="row g-3">
+        <div class="col-12">
+          <input type="text" class="form-control" formControlName="street" placeholder="House No / Street Name"
+            [ngClass]="{'is-invalid': requestForm.get('street')?.touched && requestForm.get('street')?.invalid}">
+          @if (requestForm.get('street')?.touched && requestForm.get('street')?.invalid) {
+          <div class="invalid-feedback">Street address is required.</div>
+          }
+        </div>
+        <div class="col-md-5">
+          <input type="text" class="form-control" formControlName="city" placeholder="City"
+            [ngClass]="{'is-invalid': requestForm.get('city')?.touched && requestForm.get('city')?.invalid}">
+          @if (requestForm.get('city')?.touched && requestForm.get('city')?.invalid) {
+          <div class="invalid-feedback">City is required.</div>
+          }
+        </div>
+        <div class="col-md-4">
+          <input type="text" class="form-control" formControlName="state" placeholder="State"
+            [ngClass]="{'is-invalid': requestForm.get('state')?.touched && requestForm.get('state')?.invalid}">
+          @if (requestForm.get('state')?.touched && requestForm.get('state')?.invalid) {
+          <div class="invalid-feedback">State is required.</div>
+          }
+        </div>
+        <div class="col-md-3">
+          <input type="text" class="form-control" formControlName="zipCode" placeholder="Zip Code"
+            [ngClass]="{'is-invalid': requestForm.get('zipCode')?.touched && requestForm.get('zipCode')?.invalid}">
+          @if (requestForm.get('zipCode')?.touched && requestForm.get('zipCode')?.invalid) {
+          <div class="invalid-feedback">Zip Code is required.</div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label fw-bold">Priority</label>
+        <select class="form-select" formControlName="priority">
+          <option value="LOW">Low</option>
+          <option value="MEDIUM">Medium</option>
+          <option value="HIGH">High</option>
+        </select>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label fw-bold">Preferred Schedule</label>
+        <input type="datetime-local" class="form-control" formControlName="preferredDate" [min]="minDate"
+          [ngClass]="{'is-invalid': requestForm.get('preferredDate')?.touched && requestForm.get('preferredDate')?.invalid}">
+        @if (requestForm.get('preferredDate')?.touched && requestForm.get('preferredDate')?.invalid) {
+        <div class="invalid-feedback d-block">
+          Please select a valid future date and time.
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="d-flex flex-column gap-2 mt-3">
+      <button type="submit" class="btn btn-primary btn-lg" [disabled]="requestForm.invalid || isLoading">
+        {{ isLoading ? 'Submitting...' : 'Submit Request' }}
+      </button>
+    </div>
+  </form>
+</div>

@@ -14,8 +14,10 @@ export interface Invoice {
 
 export interface CreateInvoiceRequest {
   requestId: string;
-  amount: number;
-  dueDate: string;
+  customerId: string;
+  serviceAmount: number;
+  taxAmount: number;
+  totalAmount: number;
 }
 
 export interface RevenueReport {

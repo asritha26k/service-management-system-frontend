@@ -61,10 +61,14 @@ export class RegisterFormContainerComponent {
       this.isLoading = true;
       this.errorMessage = '';
       
-      // Exclude confirmPassword from payload
-      const { confirmPassword, ...registerData } = this.registerForm.value;
+      // Map form fields to match backend DTO
+      const { confirmPassword, roles, phoneNumber, ...rest } = this.registerForm.value;
+      const registerData = {
+        ...rest,
+        phone: phoneNumber  // Map phoneNumber to phone
+      };
       
-      this.authService.registerCustomer(registerData).subscribe({
+      this.authService.registerCustomer(registerData as any).subscribe({
         next: () => {
           this.isLoading = false;
           this.ns.showSuccess('Registration successful! Please login.');
