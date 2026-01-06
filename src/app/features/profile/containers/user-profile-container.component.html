@@ -110,8 +110,8 @@
               <div class="invalid-feedback d-block">
                 @if (form.get('state')?.errors?.['required']) {
                 State is required.
-                } @else if (form.get('state')?.errors?.['alphabeticOnly']) {
-                State must contain only letters (no spaces, numbers, or special characters).
+                } @else if (form.get('state')?.errors?.['alphaWithSpaces']) {
+                State must contain only letters and spaces.
                 } @else if (form.get('state')?.errors?.['whitespace']) {
                 State cannot be only spaces.
                 }

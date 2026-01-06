@@ -105,8 +105,8 @@
           <div class="invalid-feedback">
             @if (requestForm.get('state')?.errors?.['required']) {
             State is required.
-            } @else if (requestForm.get('state')?.errors?.['alphabeticOnly']) {
-            State must contain only letters (no spaces, numbers, or special characters).
+            } @else if (requestForm.get('state')?.errors?.['alphaWithSpaces']) {
+            State must contain only letters and spaces.
             } @else if (requestForm.get('state')?.errors?.['whitespace']) {
             State cannot be only spaces.
             }

@@ -28,7 +28,7 @@ export class UserProfileContainerComponent implements OnInit {
     phone: ['', [Validators.required, Validators.pattern('^[0-9]{10,12}$')]],
     address: ['', [Validators.required, Validators.minLength(10), addressValidator(), noWhitespaceValidator()]],
     city: ['', [Validators.required, Validators.minLength(2), alphabeticOnlyValidator(), noWhitespaceValidator()]],
-    state: ['', [Validators.required, Validators.minLength(2), alphabeticOnlyValidator(), noWhitespaceValidator()]],
+    state: ['', [Validators.required, Validators.minLength(2), alphaWithSpacesValidator(), noWhitespaceValidator()]],
     pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
   });
 
